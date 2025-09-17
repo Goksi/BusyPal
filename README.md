@@ -1,2 +1,2 @@
 # BusyPal
-Whatsapp bot that responds insted of you if you are busy
+Whatsapp bot that responds instead of you if you are busy
