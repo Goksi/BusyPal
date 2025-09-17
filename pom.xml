@@ -12,7 +12,7 @@
 
   <groupId>tech.goksi</groupId>
   <artifactId>busypal</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>dev</version>
   <name>BusyPal</name>
   <description>WhatsApp bot that responds instead of you if you are busy</description>
 
