@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" type="image/png" th:href="@{favicon-32x32.png}">
+  <link rel="stylesheet" th:href="@{style.css}">
+  <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v7.0.0/css/all.css"
+  />
+  <script th:if="${@environment.matchesProfiles('dev')}"
+          th:src="'http://localhost:' + ${@liveReloadServer.getPort()} + '/livereload.js'"></script>
+  <title>BusyPal | Logs</title>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="toggle-container">
+      <span class="toggle-label">Busy:</span>
+      <label class="toggle">
+        <input type="checkbox" id="busyToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="logs-icon">
+      <i class="fa-regular fa-messages" style="color: #FFD43B;" title="Messages"
+         onclick="window.location.href ='/'"></i>
+    </div>
+    <!--<button class="logout-btn">Logout</button>-->
+  </div>
+</header>
+
+</body>
+</html>
