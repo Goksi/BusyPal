@@ -11,7 +11,6 @@ import tech.goksi.busypal.event.debug.DebugEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,7 +22,7 @@ public class WhatsAppSessionOrchestrator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WhatsAppSessionOrchestrator.class);
 
-    private final Map<UUID, Whatsapp> sessions;
+    private final Map<String, Whatsapp> sessions;
     private final BusyPalProperties properties;
 
     /**
@@ -39,12 +38,12 @@ public class WhatsAppSessionOrchestrator {
     /**
      * Creates a new WhatsApp session for the given JSESSIONID.
      *
-     * @param uuid the JSESSIONID identifier
+     * @param sessionId the JSESSIONID identifier
      * @param qrHandler handler for QR code authentication
      */
-    public void createNewSession(UUID uuid, QrHandler qrHandler) {
+    public void createNewSession(String sessionId, QrHandler qrHandler) {
         Whatsapp.webBuilder()
-                .newConnection(uuid)
+                .newConnection(sessionId)
                 .historySetting(WebHistorySetting.discard(false))
                 .name(properties.getDevice().getName())
                 .unregistered(qrHandler)
@@ -53,9 +52,9 @@ public class WhatsAppSessionOrchestrator {
                 .orTimeout(properties.getLoginTimeout(), TimeUnit.SECONDS)
                 .whenComplete((whatsapp, throwable) -> {
                     if (throwable != null) {
-                        LOGGER.debug("User with id {} login timeout !", uuid.toString());
+                        LOGGER.debug("User with id {} login timeout !", sessionId.toString());
                     } else {
-                        sessions.put(uuid, whatsapp);
+                        sessions.put(sessionId, whatsapp);
                     }
                 });
     }
@@ -63,30 +62,30 @@ public class WhatsAppSessionOrchestrator {
     /**
      * Retrieves the WhatsApp session for the given JSESSIONID.
      *
-     * @param uuid the JSESSIONID identifier
+     * @param sessionId the JSESSIONID identifier
      * @return the WhatsApp session, or null if not found
      */
-    public Whatsapp getSession(UUID uuid) {
-        return sessions.get(uuid);
+    public Whatsapp getSession(String sessionId) {
+        return sessions.get(sessionId);
     }
 
     /**
      * Removes and disconnects the WhatsApp session for the given JSESSIONID.
      *
-     * @param uuid the JSESSIONID identifier
+     * @param sessionId the JSESSIONID identifier
      */
-    public void removeSession(UUID uuid) {
-        disconnectSession(uuid);
-        sessions.remove(uuid);
+    public void removeSession(String sessionId) {
+        disconnectSession(sessionId);
+        sessions.remove(sessionId);
     }
 
     /**
      * Disconnects the WhatsApp session for the given JSESSIONID.
      *
-     * @param uuid the JSESSIONID identifier
+     * @param sessionId the JSESSIONID identifier
      */
-    public void disconnectSession(UUID uuid) {
-        var session = sessions.get(uuid);
+    public void disconnectSession(String sessionId) {
+        var session = sessions.get(sessionId);
         if (session != null) {
             session.disconnect();
         }
