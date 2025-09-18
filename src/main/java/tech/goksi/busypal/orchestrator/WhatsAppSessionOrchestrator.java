@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Service for orchestrating WhatsApp sessions.
+ * Manages creation, retrieval, and removal of WhatsApp connections per JSESSIONID.
+ */
 @Service
 public class WhatsAppSessionOrchestrator {
 
@@ -22,12 +26,22 @@ public class WhatsAppSessionOrchestrator {
     private final Map<UUID, Whatsapp> sessions;
     private final BusyPalProperties properties;
 
+    /**
+     * Constructs a new WhatsAppSessionOrchestrator.
+     *
+     * @param properties application properties
+     */
     public WhatsAppSessionOrchestrator(BusyPalProperties properties) {
         this.sessions = new HashMap<>();
         this.properties = properties;
     }
 
-
+    /**
+     * Creates a new WhatsApp session for the given JSESSIONID.
+     *
+     * @param uuid the JSESSIONID identifier
+     * @param qrHandler handler for QR code authentication
+     */
     public void createNewSession(UUID uuid, QrHandler qrHandler) {
         Whatsapp.webBuilder()
                 .newConnection(uuid)
@@ -46,15 +60,31 @@ public class WhatsAppSessionOrchestrator {
                 });
     }
 
+    /**
+     * Retrieves the WhatsApp session for the given JSESSIONID.
+     *
+     * @param uuid the JSESSIONID identifier
+     * @return the WhatsApp session, or null if not found
+     */
     public Whatsapp getSession(UUID uuid) {
         return sessions.get(uuid);
     }
 
+    /**
+     * Removes and disconnects the WhatsApp session for the given JSESSIONID.
+     *
+     * @param uuid the JSESSIONID identifier
+     */
     public void removeSession(UUID uuid) {
         disconnectSession(uuid);
         sessions.remove(uuid);
     }
 
+    /**
+     * Disconnects the WhatsApp session for the given JSESSIONID.
+     *
+     * @param uuid the JSESSIONID identifier
+     */
     public void disconnectSession(UUID uuid) {
         var session = sessions.get(uuid);
         if (session != null) {
