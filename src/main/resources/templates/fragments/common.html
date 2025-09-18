@@ -1,0 +1,49 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headFragment">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link
+            href="https://site-assets.fontawesome.com/releases/v7.0.0/css/all.css"
+            rel="stylesheet"
+    />
+    <script th:if="${@environment.matchesProfiles('dev')}"
+            th:src="'http://localhost:' + ${@liveReloadServer.getPort()} + '/livereload.js'"></script>
+    <link rel="icon" th:href="@{favicon-32x32.png}" type="image/png">
+</head>
+<body>
+<ul>
+    <li class="message-item" th:fragment="messageItem(avatar, name, content)">
+        <div class="message-header">
+            <div class="user-avatar" th:text="${avatar}"></div>
+            <div class="user-name" th:text="${name}"></div>
+        </div>
+        <div class="message-content" th:text="${content}">
+        </div>
+        <div class="message-footer">
+            <button class="ack-button" title="Acknowledge">👍</button>
+        </div>
+    </li>
+</ul>
+
+<header th:fragment="header(rightButtonTitle, rightButtonLocation, rightButtonClass)">
+    <div class="header-left">
+        <div class="toggle-container">
+            <span class="toggle-label">Busy:</span>
+            <label class="toggle">
+                <input id="busyToggle" type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="logs-icon">
+            <i onclick="window.location.href = this.getAttribute('location-url')" style="color: #FFD43B;" th:class="${rightButtonClass}" th:location-url="${rightButtonLocation}"
+               th:title="${rightButtonTitle}"></i>
+        </div>
+        <!--<button class="logout-btn">Logout</button>-->
+    </div>
+</header>
+</body>
+</html>
