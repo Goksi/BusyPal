@@ -14,13 +14,13 @@ import tech.goksi.busypal.model.QuoteMessageInfo;
 
 import java.util.concurrent.CompletableFuture;
 
-public class WhatsAppManageImpl implements WhatsAppManager {
+public class WhatsAppManagerImpl implements WhatsAppManager {
 
     private static final String RESILIENCE_PROFILE = "whatsapp";
 
     private final Whatsapp whatsapp;
 
-    public WhatsAppManageImpl(Whatsapp whatsapp) {
+    public WhatsAppManagerImpl(Whatsapp whatsapp) {
         this.whatsapp = whatsapp;
     }
 
