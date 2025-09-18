@@ -5,6 +5,12 @@ import tech.goksi.busypal.model.QuoteMessageInfo;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Interface for managing WhatsApp messaging operations.
+ * <p>
+ * This manager is designed to be unique per user, ensuring that each user has
+ * a dedicated instance for handling their WhatsApp messaging actions.
+ */
 public interface WhatsAppManager {
 
     /**
