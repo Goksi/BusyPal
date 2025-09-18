@@ -4,6 +4,7 @@ public class BusyPalProperties {
 
     private Device device;
     private long loginTimeout;
+    private String[] allowedPhoneNumbers;
 
     public Device getDevice() {
         return device;
@@ -19,6 +20,14 @@ public class BusyPalProperties {
 
     public void setLoginTimeout(long loginTimeout) {
         this.loginTimeout = loginTimeout;
+    }
+
+    public String[] getAllowedPhoneNumbers() {
+        return allowedPhoneNumbers;
+    }
+
+    public void setAllowedPhoneNumbers(String[] allowedPhoneNumbers) {
+        this.allowedPhoneNumbers = allowedPhoneNumbers;
     }
 
     public static class Device {
