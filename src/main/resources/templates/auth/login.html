@@ -3,6 +3,13 @@
 <head>
   <th:block th:replace="~{fragments/common :: headFragment}"></th:block>
   <link rel="stylesheet" th:href="@{css/style-login.css}">
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.0/bundles/stomp.umd.min.js"></script>
+  <script th:src="@{js/qr-handler.js}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      connect();
+    });
+  </script>
   <title>BusyPal | Login</title>
 </head>
 <body>

@@ -1,6 +1,5 @@
 package tech.goksi.busypal.orchestrator;
 
-import it.auties.whatsapp.api.QrHandler;
 import it.auties.whatsapp.api.WebHistorySetting;
 import it.auties.whatsapp.api.Whatsapp;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tech.goksi.busypal.BusyPalProperties;
 import tech.goksi.busypal.event.debug.DebugEventListener;
+import tech.goksi.busypal.qr.handler.WebSocketQrCodeHandler;
 
 /**
  * Service for orchestrating WhatsApp sessions. Manages creation, retrieval, and removal of WhatsApp
@@ -23,30 +23,33 @@ public class WhatsAppSessionOrchestrator {
 
   private final Map<String, Whatsapp> sessions;
   private final BusyPalProperties properties;
+  private final WebSocketQrCodeHandler webSocketQrCodeHandler;
 
   /**
    * Constructs a new WhatsAppSessionOrchestrator.
    *
    * @param properties application properties
    */
-  public WhatsAppSessionOrchestrator(BusyPalProperties properties) {
+  public WhatsAppSessionOrchestrator(BusyPalProperties properties,
+      WebSocketQrCodeHandler webSocketQrCodeHandler) {
     this.sessions = new HashMap<>();
     this.properties = properties;
+    this.webSocketQrCodeHandler = webSocketQrCodeHandler;
   }
 
   /**
-   * Creates a new WhatsApp session for the given busypal_session.
+   * Creates a new WhatsApp session for the given busypal_session and send it to user
+   * over websocket
    *
    * @param sessionId the busypal_session identifier
-   * @param qrHandler handler for QR code authentication
    */
-  public void createNewSession(String sessionId, QrHandler qrHandler) {
+  public void createNewSession(String sessionId) {
     LOGGER.debug("Creating new whatsapp session for busypal session id {}", sessionId);
     Whatsapp.webBuilder()
         .newConnection(sessionId)
         .historySetting(WebHistorySetting.discard(false))
         .name(properties.getDevice().getName())
-        .unregistered(qrHandler)
+        .unregistered(qr -> webSocketQrCodeHandler.handle(sessionId, qr))
         .addListener(new DebugEventListener())
         .connect()
         .orTimeout(properties.getLoginTimeout(), TimeUnit.SECONDS)

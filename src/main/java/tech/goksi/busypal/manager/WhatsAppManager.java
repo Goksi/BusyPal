@@ -22,4 +22,6 @@ public interface WhatsAppManager {
    */
   CompletableFuture<WhatsAppMessageInfo> sendMessage(String jid, String message,
       WhatsAppMessageInfo quoteMessageInfo);
+
+  void createSession(String sessionId);
 }

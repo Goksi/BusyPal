@@ -40,6 +40,11 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
         quoteMessageInfo.id());
   }
 
+  @Override
+  public void createSession(String sessionId) {
+    sessionOrchestrator.createNewSession(sessionId);
+  }
+
   private String getCurrentSessionId() {
     var attributes = RequestContextHolder.getRequestAttributes();
     if (attributes == null) {

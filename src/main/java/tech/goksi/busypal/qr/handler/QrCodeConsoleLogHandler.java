@@ -1,4 +1,4 @@
-package tech.goksi.busypal.utils;
+package tech.goksi.busypal.qr.handler;
 
 import it.auties.qr.QrTerminal;
 import it.auties.whatsapp.api.QrHandler;
