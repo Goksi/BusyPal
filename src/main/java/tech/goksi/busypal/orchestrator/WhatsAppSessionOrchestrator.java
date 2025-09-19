@@ -52,7 +52,7 @@ public class WhatsAppSessionOrchestrator {
                 .orTimeout(properties.getLoginTimeout(), TimeUnit.SECONDS)
                 .whenComplete((whatsapp, throwable) -> {
                     if (throwable != null) {
-                        LOGGER.debug("User with id {} login timeout !", sessionId.toString());
+                        LOGGER.debug("User with id {} login timeout !", sessionId);
                     } else {
                         sessions.put(sessionId, whatsapp);
                     }
