@@ -4,6 +4,7 @@
   <th:block th:replace="~{fragments/common :: headFragment}"></th:block>
   <link rel="stylesheet" th:href="@{css/style-login.css}">
   <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.0/bundles/stomp.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <script th:src="@{js/qr-handler.js}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -27,8 +28,8 @@
   </div>
 
   <div class="qr-container">
-    <div class="qr-code">
-      <img alt="Login QR Code" height="200" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=whatsapp://authenticate?token=5f4dcc3b5aa765d61d8327deb882cf99&bgcolor=ffffff&color=000000" width="200">
+    <div class="qr-code-spinning" id="qr">
+      <div class="spinner" id="spinner"></div>
     </div>
 
     <p class="qr-instructions">Open WhatsApp on your phone and scan this QR code to authenticate your login session.</p>
