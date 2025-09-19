@@ -42,9 +42,7 @@
             <i onclick="window.location.href = this.getAttribute('location-url')" style="color: #FFD43B;" th:class="${rightButtonClass}" th:location-url="${rightButtonLocation}"
                th:title="${rightButtonTitle}"></i>
         </div>
-        <form th:action="@{/create-session}" th:method="POST">
-            <button class="logout-btn" type="submit">Get session</button>
-        </form>
+      <button class="logout-btn">Logout</button>
     </div>
 </header>
 </body>

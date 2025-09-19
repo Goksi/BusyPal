@@ -95,19 +95,17 @@ input:checked + .slider:before {
 }
 
 .logout-btn {
-  /*background-color: #d9534f;*/
+  background-color: #d9534f;
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-    background-color: green;
 }
 
 .logout-btn:hover {
-  /*background-color: #c9302c;*/
-    background-color: darkgreen;
+  background-color: #c9302c;
 }
 
 .logout-btn:focus {
