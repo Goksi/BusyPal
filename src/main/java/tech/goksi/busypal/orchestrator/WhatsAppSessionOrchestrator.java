@@ -14,7 +14,7 @@ import tech.goksi.busypal.event.debug.DebugEventListener;
 
 /**
  * Service for orchestrating WhatsApp sessions. Manages creation, retrieval, and removal of WhatsApp
- * connections per JSESSIONID.
+ * connections per busypal_session.
  */
 @Service
 public class WhatsAppSessionOrchestrator {
@@ -35,12 +35,13 @@ public class WhatsAppSessionOrchestrator {
   }
 
   /**
-   * Creates a new WhatsApp session for the given JSESSIONID.
+   * Creates a new WhatsApp session for the given busypal_session.
    *
-   * @param sessionId the JSESSIONID identifier
+   * @param sessionId the busypal_session identifier
    * @param qrHandler handler for QR code authentication
    */
   public void createNewSession(String sessionId, QrHandler qrHandler) {
+    LOGGER.debug("Creating new whatsapp session for busypal session id {}", sessionId);
     Whatsapp.webBuilder()
         .newConnection(sessionId)
         .historySetting(WebHistorySetting.discard(false))
@@ -59,9 +60,9 @@ public class WhatsAppSessionOrchestrator {
   }
 
   /**
-   * Retrieves the WhatsApp session for the given JSESSIONID.
+   * Retrieves the WhatsApp session for the given busypal_session.
    *
-   * @param sessionId the JSESSIONID identifier
+   * @param sessionId the busypal_session identifier
    * @return the WhatsApp session, or null if not found
    */
   public Whatsapp getSession(String sessionId) {
@@ -69,9 +70,9 @@ public class WhatsAppSessionOrchestrator {
   }
 
   /**
-   * Removes and disconnects the WhatsApp session for the given JSESSIONID.
+   * Removes and disconnects the WhatsApp session for the given busypal_session.
    *
-   * @param sessionId the JSESSIONID identifier
+   * @param sessionId the busypal_session identifier
    */
   public void removeSession(String sessionId) {
     disconnectSession(sessionId);
@@ -79,9 +80,9 @@ public class WhatsAppSessionOrchestrator {
   }
 
   /**
-   * Disconnects the WhatsApp session for the given JSESSIONID.
+   * Disconnects the WhatsApp session for the given busypal_session.
    *
-   * @param sessionId the JSESSIONID identifier
+   * @param sessionId the busypal_session identifier
    */
   public void disconnectSession(String sessionId) {
     var session = sessions.get(sessionId);
