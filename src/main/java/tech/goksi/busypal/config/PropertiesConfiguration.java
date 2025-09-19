@@ -8,9 +8,9 @@ import tech.goksi.busypal.BusyPalProperties;
 @Configuration
 public class PropertiesConfiguration {
 
-    @Bean
-    @ConfigurationProperties(prefix = "busypal")
-    public BusyPalProperties busyPalProperties() {
-        return new BusyPalProperties();
-    }
+  @Bean
+  @ConfigurationProperties(prefix = "busypal")
+  public BusyPalProperties busyPalProperties() {
+    return new BusyPalProperties();
+  }
 }

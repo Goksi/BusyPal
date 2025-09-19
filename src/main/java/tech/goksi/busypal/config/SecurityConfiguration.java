@@ -9,15 +9,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfiguration {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(auth -> {
-            auth.anyRequest().permitAll();
-        }).sessionManagement(session -> {
-            session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-        });
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.authorizeHttpRequests(auth -> {
+      auth.anyRequest().permitAll();
+    }).sessionManagement(session -> {
+      session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+    });
 
-        return httpSecurity.build();
-    }
+    return httpSecurity.build();
+  }
 
 }

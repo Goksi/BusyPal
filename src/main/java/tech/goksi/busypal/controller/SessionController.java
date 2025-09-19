@@ -9,15 +9,15 @@ import tech.goksi.busypal.utils.QrCodeConsoleLogHandler;
 @Controller
 public class SessionController {
 
-    private final WhatsAppSessionOrchestrator sessionOrchestrator;
+  private final WhatsAppSessionOrchestrator sessionOrchestrator;
 
-    public SessionController(WhatsAppSessionOrchestrator sessionOrchestrator) {
-        this.sessionOrchestrator = sessionOrchestrator;
-    }
+  public SessionController(WhatsAppSessionOrchestrator sessionOrchestrator) {
+    this.sessionOrchestrator = sessionOrchestrator;
+  }
 
-    @PostMapping("/create-session")
-    public String createSession(HttpSession session) {
-        sessionOrchestrator.createNewSession(session.getId(), QrCodeConsoleLogHandler.getInstance());
-        return "redirect:/?session=created";
-    }
+  @PostMapping("/create-session")
+  public String createSession(HttpSession session) {
+    sessionOrchestrator.createNewSession(session.getId(), QrCodeConsoleLogHandler.getInstance());
+    return "redirect:/?session=created";
+  }
 }
