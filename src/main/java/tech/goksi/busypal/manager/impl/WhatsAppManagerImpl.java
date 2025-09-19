@@ -32,6 +32,9 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
         if (whatsAppSession == null) {
             throw new WhatsAppNotConnectedException("Trying to call whatsapp manager without whatsapp session bound to busypal session !");
         }
+        if (quoteMessageInfo == null) {
+            return client.sendMessage(whatsAppSession, jid, message);
+        }
         return client.sendMessage(whatsAppSession, jid, message, quoteMessageInfo.jid(), quoteMessageInfo.id());
     }
 
