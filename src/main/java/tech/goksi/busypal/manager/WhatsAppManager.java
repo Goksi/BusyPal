@@ -1,7 +1,6 @@
 package tech.goksi.busypal.manager;
 
-import it.auties.whatsapp.model.info.MessageInfo;
-import tech.goksi.busypal.model.QuoteMessageInfo;
+import tech.goksi.busypal.model.whatsapp.WhatsAppMessageInfo;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,5 +20,5 @@ public interface WhatsAppManager {
      * @param quoteMessageInfo information about the quoted message, if any
      * @return a CompletableFuture containing the sent MessageInfo
      */
-    CompletableFuture<? extends MessageInfo<?>> sendMessage(String jid, String message, QuoteMessageInfo quoteMessageInfo);
+    CompletableFuture<WhatsAppMessageInfo> sendMessage(String jid, String message, WhatsAppMessageInfo quoteMessageInfo);
 }

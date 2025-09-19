@@ -1,4 +1,4 @@
-package tech.goksi.busypal.manager.impl;
+package tech.goksi.busypal.client.impl;
 
 import it.auties.whatsapp.api.Whatsapp;
 import it.auties.whatsapp.controller.Store;
@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tech.goksi.busypal.client.WhatsAppClient;
 import tech.goksi.busypal.exceptions.WhatsAppAvailabilityException;
 import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
-import tech.goksi.busypal.manager.WhatsAppManager;
-import tech.goksi.busypal.model.QuoteMessageInfo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
@@ -24,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class WhatsAppManagerTest {
+class WhatsAppClientTest {
 
     @Mock
     private Whatsapp whatsapp;
@@ -35,11 +34,11 @@ public class WhatsAppManagerTest {
     @Mock
     private ChatMessageInfo messageInfo;
 
-    private WhatsAppManager whatsAppManager;
+    private WhatsAppClient client;
 
     @BeforeEach
     void setUp() {
-        whatsAppManager = new WhatsAppManagerImpl(whatsapp);
+        client = new CobaltWhatsAppClientImpl(whatsapp);
         lenient().when(whatsapp.store()).thenReturn(store);
     }
 
@@ -48,7 +47,7 @@ public class WhatsAppManagerTest {
         when(whatsapp.isConnected()).thenReturn(false);
 
         assertThrows(WhatsAppNotConnectedException.class, () ->
-                whatsAppManager.sendMessage("123456789@s.whatsapp.net", "Test message", null));
+                client.sendMessage("123456789@s.whatsapp.net", "Test message", null, null));
 
         verify(whatsapp).isConnected();
         verify(whatsapp, never()).sendChatMessage(any(), anyString());
@@ -63,7 +62,7 @@ public class WhatsAppManagerTest {
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
 
-        var result = whatsAppManager.sendMessage(jid, message, null);
+        var result = client.sendMessage(jid, message, null, null);
 
         assertNotNull(result);
         verify(whatsapp).isConnected();
@@ -80,9 +79,8 @@ public class WhatsAppManagerTest {
 
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
-        QuoteMessageInfo quoteInfo = new QuoteMessageInfo(jid, "quote123");
 
-        var result = whatsAppManager.sendMessage(jid, message, quoteInfo);
+        var result = client.sendMessage(jid, message, jid, "quote123");
 
         assertNotNull(result);
         verify(whatsapp).isConnected();
@@ -99,9 +97,8 @@ public class WhatsAppManagerTest {
 
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
-        QuoteMessageInfo quoteInfo = new QuoteMessageInfo(jid, "nonexistent");
 
-        var result = whatsAppManager.sendMessage(jid, message, quoteInfo);
+        var result = client.sendMessage(jid, message, jid, "nonexistent");
 
         assertNotNull(result);
         verify(whatsapp).isConnected();
@@ -114,9 +111,9 @@ public class WhatsAppManagerTest {
         Exception testException = new RuntimeException("Test exception");
 
         InvocationTargetException exception = assertThrows(InvocationTargetException.class, () -> {
-            var method = WhatsAppManagerImpl.class.getDeclaredMethod("fallback", Exception.class);
+            var method = CobaltWhatsAppClientImpl.class.getDeclaredMethod("fallback", Exception.class);
             method.setAccessible(true);
-            method.invoke(whatsAppManager, testException);
+            method.invoke(client, testException);
         });
 
         assertInstanceOf(WhatsAppAvailabilityException.class, exception.getCause());
