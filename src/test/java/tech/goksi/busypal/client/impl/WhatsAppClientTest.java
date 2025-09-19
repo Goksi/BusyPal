@@ -38,7 +38,7 @@ class WhatsAppClientTest {
 
     @BeforeEach
     void setUp() {
-        client = new CobaltWhatsAppClientImpl(whatsapp);
+        client = new CobaltWhatsAppClientImpl();
         lenient().when(whatsapp.store()).thenReturn(store);
     }
 
@@ -47,7 +47,7 @@ class WhatsAppClientTest {
         when(whatsapp.isConnected()).thenReturn(false);
 
         assertThrows(WhatsAppNotConnectedException.class, () ->
-                client.sendMessage("123456789@s.whatsapp.net", "Test message", null, null));
+                client.sendMessage(whatsapp, "123456789@s.whatsapp.net", "Test message", null, null));
 
         verify(whatsapp).isConnected();
         verify(whatsapp, never()).sendChatMessage(any(), anyString());
@@ -62,7 +62,7 @@ class WhatsAppClientTest {
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
 
-        var result = client.sendMessage(jid, message, null, null);
+        var result = client.sendMessage(whatsapp, jid, message, null, null);
 
         assertNotNull(result);
         verify(whatsapp).isConnected();
@@ -80,7 +80,7 @@ class WhatsAppClientTest {
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
 
-        var result = client.sendMessage(jid, message, jid, "quote123");
+        var result = client.sendMessage(whatsapp, jid, message, jid, "quote123");
 
         assertNotNull(result);
         verify(whatsapp).isConnected();
@@ -98,7 +98,7 @@ class WhatsAppClientTest {
         String jid = "123456789@s.whatsapp.net";
         String message = "Test message";
 
-        var result = client.sendMessage(jid, message, jid, "nonexistent");
+        var result = client.sendMessage(whatsapp, jid, message, jid, "nonexistent");
 
         assertNotNull(result);
         verify(whatsapp).isConnected();

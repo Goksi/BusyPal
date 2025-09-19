@@ -7,6 +7,7 @@ import it.auties.whatsapp.api.Whatsapp;
 import it.auties.whatsapp.model.info.MessageInfo;
 import it.auties.whatsapp.model.jid.Jid;
 import it.auties.whatsapp.model.jid.JidProvider;
+import org.springframework.stereotype.Component;
 import tech.goksi.busypal.client.WhatsAppClient;
 import tech.goksi.busypal.exceptions.WhatsAppAvailabilityException;
 import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
@@ -14,22 +15,17 @@ import tech.goksi.busypal.model.whatsapp.WhatsAppMessageInfo;
 
 import java.util.concurrent.CompletableFuture;
 
+@Component
 public class CobaltWhatsAppClientImpl implements WhatsAppClient {
 
     private static final String RESILIENCE_PROFILE = "whatsapp";
-
-    private final Whatsapp api;
-
-    public CobaltWhatsAppClientImpl(Whatsapp api) {
-        this.api = api;
-    }
 
     @CircuitBreaker(name = RESILIENCE_PROFILE, fallbackMethod = "fallback")
     @RateLimiter(name = RESILIENCE_PROFILE)
     @Retry(name = RESILIENCE_PROFILE)
     @Override
-    public CompletableFuture<WhatsAppMessageInfo> sendMessage(String jid, String message, String quotedMessageJid, String quotedMessageId) {
-        checkConnection();
+    public CompletableFuture<WhatsAppMessageInfo> sendMessage(Whatsapp api, String jid, String message, String quotedMessageJid, String quotedMessageId) {
+        checkConnection(api);
         JidProvider jidProvider = Jid.of(jid);
         if (quotedMessageJid == null || quotedMessageId == null) {
             return api.sendChatMessage(jidProvider, message).thenApply(this::mapMessageInfo);
@@ -44,7 +40,7 @@ public class CobaltWhatsAppClientImpl implements WhatsAppClient {
         }
     }
 
-    private void checkConnection() {
+    private void checkConnection(Whatsapp api) {
         if (!api.isConnected()) {
             throw new WhatsAppNotConnectedException("Can't call whatsapp if client is not connected !");
         }
