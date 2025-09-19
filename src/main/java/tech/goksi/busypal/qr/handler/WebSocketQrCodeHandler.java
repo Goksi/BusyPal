@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import tech.goksi.busypal.event.QrCodeWsEvent;
 
 @Component
 public class WebSocketQrCodeHandler {
@@ -26,7 +27,7 @@ public class WebSocketQrCodeHandler {
     template.convertAndSendToUser(
         sessionId,
         "/topic/qr",
-        qrData,
+        new QrCodeWsEvent(qrData),
         headerAccessor.getMessageHeaders()
     );
     qrMapping.put(sessionId, qrData);

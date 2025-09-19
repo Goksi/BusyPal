@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tech.goksi.busypal.BusyPalProperties;
-import tech.goksi.busypal.event.debug.DebugEventListener;
+import tech.goksi.busypal.event.listener.debug.DebugEventListener;
 import tech.goksi.busypal.qr.handler.WebSocketQrCodeHandler;
 
 /**

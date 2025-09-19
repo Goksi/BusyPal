@@ -1,4 +1,4 @@
-package tech.goksi.busypal.event;
+package tech.goksi.busypal.event.listener;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

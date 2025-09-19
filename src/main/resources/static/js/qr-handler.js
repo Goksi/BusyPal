@@ -4,10 +4,9 @@ function connect() {
   });
   stompClient.connect({}, function (frame) {
     console.log('Connected to ws: ' + frame);
-    let cookie = getCookie('busypal_session')
-    stompClient.subscribe('/topic/qr-user' + cookie, function (msg) {
-      console.log('Received QR data: ' + msg.body)
-    });
+    let session = getCookie('busypal_session')
+    stompClient.subscribe('/topic/qr-user' + session, handleMessage);
+    stompClient.publish({destination: '/busypal/ready', body: JSON.stringify({event_type: "client_ready", cookie: session})})
   });
 }
 
@@ -15,6 +14,15 @@ function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+function handleMessage(message) {
+  let parsedMsg = JSON.parse(message.body);
+  if (parsedMsg.event_type === 'wa_qr_code') {
+    let qrCode = parsedMsg.qr;
+    console.log("DOBIO SAM QR: " + qrCode)
+  }
 }
 
 // I HATE JS
