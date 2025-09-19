@@ -10,7 +10,7 @@
     />
     <script th:if="${@environment.matchesProfiles('dev')}"
             th:src="'http://localhost:' + ${@liveReloadServer.getPort()} + '/livereload.js'"></script>
-    <link rel="icon" th:href="@{favicon-32x32.png}" type="image/png">
+    <link rel="icon" th:href="@{img/favicon-32x32.png}" type="image/png">
 </head>
 <body>
 <ul>

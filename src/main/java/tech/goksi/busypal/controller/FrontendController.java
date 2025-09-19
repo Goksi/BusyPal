@@ -2,21 +2,22 @@ package tech.goksi.busypal.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import tech.goksi.busypal.BusyPalEndpoint;
 
 @Controller
 public class FrontendController {
 
-  @GetMapping("/")
+  @GetMapping(BusyPalEndpoint.INDEX)
   public String index() {
     return "index";
   }
 
-  @GetMapping("/logs")
+  @GetMapping(BusyPalEndpoint.LOGS)
   public String logs() {
     return "logs";
   }
 
-  @GetMapping("/login")
+  @GetMapping(BusyPalEndpoint.LOGIN)
   public String login() {
     return "auth/login";
   }
