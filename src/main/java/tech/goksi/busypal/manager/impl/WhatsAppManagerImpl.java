@@ -55,6 +55,7 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
     sessionOrchestrator.migrateSession(oldSessionId, newSessionId);
   }
 
+  /*TODO: might be problematic, check*/
   private String getCurrentSessionId() {
     var attributes = RequestContextHolder.getRequestAttributes();
     if (attributes == null) {
