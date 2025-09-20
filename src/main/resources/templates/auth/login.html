@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <script th:src="@{js/qr-handler.js}"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       connect();
     });
   </script>
@@ -18,7 +18,9 @@
   <div class="app-logo">
     <svg fill="none" height="80" viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
       <rect fill="#333333" height="80" rx="12" width="80"/>
-      <path d="M40 15C26.2 15 15 26.2 15 40C15 53.8 26.2 65 40 65C53.8 65 65 53.8 65 40C65 26.2 53.8 15 40 15ZM45 55H35V45H45V55ZM45 40C45 42.8 42.8 45 40 45C37.2 45 35 42.8 35 40V25H45V40Z" fill="#28a745"/>
+      <path
+          d="M40 15C26.2 15 15 26.2 15 40C15 53.8 26.2 65 40 65C53.8 65 65 53.8 65 40C65 26.2 53.8 15 40 15ZM45 55H35V45H45V55ZM45 40C45 42.8 42.8 45 40 45C37.2 45 35 42.8 35 40V25H45V40Z"
+          fill="#28a745"/>
     </svg>
   </div>
 
@@ -32,10 +34,16 @@
       <div class="spinner" id="spinner"></div>
     </div>
 
-    <p class="qr-instructions">Open WhatsApp on your phone and scan this QR code to authenticate your login session.</p>
+    <p class="qr-instructions">Open WhatsApp on your phone and scan this QR code to authenticate
+      your login session.</p>
+    <div class="error-box" th:if="${param.error}">
+      You haven't scanned code with WhatsApp or your number is not listed as allowed number
+    </div>
   </div>
 
-  <button class="login-btn" id="loginBtn">Login</button>
+  <form th:action="@{/login}" th:method="POST">
+    <button class="login-btn" id="loginBtn" type="submit">Login</button>
+  </form>
 
 </div>
 
