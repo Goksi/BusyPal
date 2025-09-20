@@ -2,6 +2,7 @@ package tech.goksi.busypal.manager;
 
 import java.util.concurrent.CompletableFuture;
 import tech.goksi.busypal.model.whatsapp.WhatsAppMessageInfo;
+import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
 /**
  * Interface for managing WhatsApp messaging operations.
@@ -28,4 +29,8 @@ public interface WhatsAppManager {
   void removeSession(String sessionId);
 
   void migrateSession(String oldSessionId, String newSessionId);
+
+  boolean isConnected(String sessionId);
+
+  WhatsAppPrincipal getDetails(String sessionId);
 }

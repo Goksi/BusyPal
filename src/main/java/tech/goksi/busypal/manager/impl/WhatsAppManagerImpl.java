@@ -8,6 +8,7 @@ import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
 import tech.goksi.busypal.manager.WhatsAppManager;
 import tech.goksi.busypal.model.whatsapp.WhatsAppMessageInfo;
 import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
+import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
 @Service
 public class WhatsAppManagerImpl implements WhatsAppManager {
@@ -53,6 +54,28 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
   @Override
   public void migrateSession(String oldSessionId, String newSessionId) {
     sessionOrchestrator.migrateSession(oldSessionId, newSessionId);
+  }
+
+  @Override
+  public boolean isConnected(String sessionId) {
+    var session = sessionOrchestrator.getSession(sessionId);
+    if (session == null) {
+      return false;
+    }
+    return session.isConnected();
+  }
+
+  @Override
+  public WhatsAppPrincipal getDetails(String sessionId) {
+    var session = sessionOrchestrator.getSession(sessionId);
+    if (session == null) {
+      return null;
+    }
+    var phoneNumber = session.store().phoneNumber().orElse(null);
+    if (phoneNumber == null) {
+      return null;
+    }
+    return new WhatsAppPrincipal(phoneNumber.toString());
   }
 
   /*TODO: might be problematic, check*/
