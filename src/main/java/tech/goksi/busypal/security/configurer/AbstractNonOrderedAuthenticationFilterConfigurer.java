@@ -46,8 +46,6 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<B extends
 
   private LoginUrlAuthenticationEntryPoint authenticationEntryPoint;
 
-  private boolean customLoginPage;
-
   private String loginPage;
 
   private String loginProcessingUrl;
@@ -197,7 +195,6 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<B extends
   protected T loginPage(String loginPage) {
     setLoginPage(loginPage);
     updateAuthenticationDefaults();
-    this.customLoginPage = true;
     return getSelf();
   }
 
