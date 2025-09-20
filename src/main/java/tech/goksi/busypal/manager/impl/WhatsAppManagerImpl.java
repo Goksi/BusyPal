@@ -45,6 +45,11 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
     sessionOrchestrator.createNewSession(sessionId);
   }
 
+  @Override
+  public void removeSession(String sessionId) {
+    sessionOrchestrator.removeSession(sessionId);
+  }
+
   private String getCurrentSessionId() {
     var attributes = RequestContextHolder.getRequestAttributes();
     if (attributes == null) {

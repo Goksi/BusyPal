@@ -24,4 +24,6 @@ public interface WhatsAppManager {
       WhatsAppMessageInfo quoteMessageInfo);
 
   void createSession(String sessionId);
+
+  void removeSession(String sessionId);
 }

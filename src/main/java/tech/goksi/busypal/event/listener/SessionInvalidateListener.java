@@ -6,17 +6,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.web.session.HttpSessionDestroyedEvent;
 import org.springframework.stereotype.Component;
-import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
+import tech.goksi.busypal.manager.WhatsAppManager;
 
 @Component
 public class SessionInvalidateListener implements ApplicationListener<HttpSessionDestroyedEvent> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SessionInvalidateListener.class);
 
-  private final WhatsAppSessionOrchestrator sessionOrchestrator;
+  private final WhatsAppManager manager;
 
-  public SessionInvalidateListener(WhatsAppSessionOrchestrator sessionOrchestrator) {
-    this.sessionOrchestrator = sessionOrchestrator;
+  public SessionInvalidateListener(WhatsAppManager manager) {
+    this.manager = manager;
   }
 
   @Override
@@ -25,6 +25,6 @@ public class SessionInvalidateListener implements ApplicationListener<HttpSessio
     LOGGER.debug(
         "Session with id {} invalidated, removing any whatsapp sessions associated with it...",
         sessionId);
-    sessionOrchestrator.removeSession(sessionId);
+    manager.removeSession(sessionId);
   }
 }
