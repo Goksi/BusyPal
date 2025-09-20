@@ -50,6 +50,11 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
     sessionOrchestrator.removeSession(sessionId);
   }
 
+  @Override
+  public void migrateSession(String oldSessionId, String newSessionId) {
+    sessionOrchestrator.migrateSession(oldSessionId, newSessionId);
+  }
+
   private String getCurrentSessionId() {
     var attributes = RequestContextHolder.getRequestAttributes();
     if (attributes == null) {

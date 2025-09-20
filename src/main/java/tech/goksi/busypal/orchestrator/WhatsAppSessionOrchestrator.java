@@ -108,4 +108,13 @@ public class WhatsAppSessionOrchestrator {
       session.disconnect();
     }
   }
+
+  public void migrateSession(String oldSessionId, String newSessionId) {
+    var session = sessions.get(oldSessionId);
+    if (session == null) {
+      return;
+    }
+    sessions.remove(oldSessionId);
+    sessions.put(newSessionId, session);
+  }
 }

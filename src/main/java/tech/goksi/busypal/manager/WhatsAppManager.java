@@ -26,4 +26,6 @@ public interface WhatsAppManager {
   void createSession(String sessionId);
 
   void removeSession(String sessionId);
+
+  void migrateSession(String oldSessionId, String newSessionId);
 }
