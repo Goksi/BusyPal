@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,8 +18,8 @@ public class WhatsAppAuthenticationFilter extends AbstractAuthenticationProcessi
   private static final RequestMatcher LOGIN_HANDLER_PATH = PathPatternRequestMatcher.withDefaults()
       .matcher(HttpMethod.POST, BusyPalEndpoint.LOGIN);
 
-  public WhatsAppAuthenticationFilter(AuthenticationManager authenticationManager) {
-    super(LOGIN_HANDLER_PATH, authenticationManager);
+  public WhatsAppAuthenticationFilter() {
+    super(LOGIN_HANDLER_PATH);
   }
 
   @Override
@@ -31,7 +30,8 @@ public class WhatsAppAuthenticationFilter extends AbstractAuthenticationProcessi
     }
     HttpSession session = request.getSession(false);
     if (session == null) {
-      throw new AuthenticationCredentialsNotFoundException("Session not found in authentication request");
+      throw new AuthenticationCredentialsNotFoundException(
+          "Session not found in authentication request");
     }
     String sessionId = session.getId();
     Authentication token = new WhatsAppAuthenticationToken(sessionId);

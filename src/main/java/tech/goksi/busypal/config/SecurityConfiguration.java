@@ -7,17 +7,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tech.goksi.busypal.BusyPalEndpoint;
-import tech.goksi.busypal.security.WhatsAppAuthenticationFilter;
 import tech.goksi.busypal.security.WhatsAppAuthenticationProvider;
+import tech.goksi.busypal.security.configurer.WhatsAppAuthenticationConfigurer;
 
 @Configuration
 public class SecurityConfiguration {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
-      AuthenticationManager manager) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity.authorizeHttpRequests(auth -> {
       auth.requestMatchers(BusyPalEndpoint.LOGIN, "/error", "/css/**", "/img/**", "/js/**",
               "/ws/**")
@@ -25,14 +23,12 @@ public class SecurityConfiguration {
       auth.anyRequest().authenticated();
     }).sessionManagement(session -> {
       session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-    }).formLogin(form -> {
-      form
+    }).with(new WhatsAppAuthenticationConfigurer<>(), waConfigurer -> {
+      waConfigurer
           .loginPage(BusyPalEndpoint.LOGIN)
           .successForwardUrl(BusyPalEndpoint.INDEX)
           .loginProcessingUrl(BusyPalEndpoint.LOGIN);
-    }).addFilterAt(new WhatsAppAuthenticationFilter(manager),
-        UsernamePasswordAuthenticationFilter.class);
-
+    });
     return httpSecurity.build();
   }
 
