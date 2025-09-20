@@ -2,34 +2,22 @@ package tech.goksi.busypal.qr.handler;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-import tech.goksi.busypal.event.QrCodeWsEvent;
+import tech.goksi.busypal.event.publisher.EventPublisher;
 
 @Component
 public class WebSocketQrCodeHandler {
 
-  private final SimpMessagingTemplate template;
+  private final EventPublisher publisher;
   private final Map<String, String> qrMapping;
 
-  public WebSocketQrCodeHandler(SimpMessagingTemplate template) {
-    this.template = template;
+  public WebSocketQrCodeHandler(EventPublisher publisher) {
+    this.publisher = publisher;
     this.qrMapping = new HashMap<>();
   }
 
   public void handle(String sessionId, String qrData) {
-    SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
-        .create(SimpMessageType.MESSAGE);
-    headerAccessor.setSessionId(sessionId);
-    headerAccessor.setLeaveMutable(true);
-    template.convertAndSendToUser(
-        sessionId,
-        "/topic/qr",
-        new QrCodeWsEvent(qrData),
-        headerAccessor.getMessageHeaders()
-    );
+    publisher.publishQrCodeEvent(sessionId, qrData);
     qrMapping.put(sessionId, qrData);
   }
 
