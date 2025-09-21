@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +121,11 @@ public class WhatsAppSessionOrchestrator {
 
   public void logoutAllSessions() {
     for (Whatsapp api : sessions.values()) {
-      api.logout().join();
+      try {
+        api.logout().join();
+      } catch (CompletionException exception) {
+        LOGGER.debug("Error while cleaning up sessions...", exception.getCause());
+      }
     }
   }
 }
