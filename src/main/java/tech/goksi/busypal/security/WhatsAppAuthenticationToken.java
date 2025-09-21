@@ -1,10 +1,12 @@
 package tech.goksi.busypal.security;
 
+import java.io.Serializable;
 import java.util.Collections;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
-public class WhatsAppAuthenticationToken extends AbstractAuthenticationToken {
+public class WhatsAppAuthenticationToken extends AbstractAuthenticationToken
+    implements Serializable {
 
   private final String sessionId;
   private WhatsAppPrincipal principal;
