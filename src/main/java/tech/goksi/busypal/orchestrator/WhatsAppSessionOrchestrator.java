@@ -117,4 +117,10 @@ public class WhatsAppSessionOrchestrator {
     sessions.remove(oldSessionId);
     sessions.put(newSessionId, session);
   }
+
+  public void logoutAllSessions() {
+    for (Whatsapp api : sessions.values()) {
+      api.logout().join();
+    }
+  }
 }

@@ -1,6 +1,9 @@
 package tech.goksi.busypal.manager.impl;
 
 import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import tech.goksi.busypal.client.WhatsAppClient;
@@ -11,7 +14,9 @@ import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
 import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
 @Service
-public class WhatsAppManagerImpl implements WhatsAppManager {
+public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(WhatsAppManagerImpl.class);
 
   private final WhatsAppSessionOrchestrator sessionOrchestrator;
   private final WhatsAppClient client;
@@ -87,4 +92,9 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
     return attributes.getSessionId();
   }
 
+  @Override
+  public void destroy() {
+    LOGGER.info("Running WhatsApp sessions cleanup... Logging out of every session");
+    sessionOrchestrator.logoutAllSessions();
+  }
 }
