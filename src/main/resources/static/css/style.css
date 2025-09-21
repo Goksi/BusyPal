@@ -186,3 +186,21 @@ input:checked + .slider:before {
 .acknowledged:hover {
   background-color: #5a6268;
 }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+.user-value {
+  color: #FFD43B;
+  font-weight: 600;
+  background: #444;
+  border: 1px solid #555;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}

@@ -42,6 +42,12 @@
             <i onclick="window.location.href = this.getAttribute('location-url')" style="color: #FFD43B;" th:class="${rightButtonClass}" th:location-url="${rightButtonLocation}"
                th:title="${rightButtonTitle}"></i>
         </div>
+
+      <div class="user-info">
+        <!--/*@thymesVar id="currentPhone" type="java.lang.String"*/-->
+        <span class="user-value" th:text="${currentPhone}">UNKNOWN</span>
+      </div>
+
       <a href="/logout">
         <button class="logout-btn">Logout</button>
       </a>
