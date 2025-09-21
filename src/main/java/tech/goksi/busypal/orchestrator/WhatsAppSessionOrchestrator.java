@@ -122,6 +122,9 @@ public class WhatsAppSessionOrchestrator {
   public void logoutAllSessions() {
     for (Whatsapp api : sessions.values()) {
       try {
+        if (!api.isConnected()) {
+          api.connect().join();
+        }
         api.logout().join();
       } catch (CompletionException exception) {
         LOGGER.debug("Error while cleaning up sessions...", exception.getCause());
