@@ -2,16 +2,19 @@ package tech.goksi.busypal.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import tech.goksi.busypal.BusyPalEndpoint;
 import tech.goksi.busypal.security.WhatsAppAuthenticationProvider;
 import tech.goksi.busypal.security.configurer.WhatsAppAuthenticationConfigurer;
 import tech.goksi.busypal.security.filter.LoginPageRedirectFilter;
+import tech.goksi.busypal.security.handler.LogoutWhatsAppHandler;
 
 @Configuration
 public class SecurityConfiguration {
@@ -19,7 +22,8 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain securityFilterChain(
       HttpSecurity httpSecurity,
-      LoginPageRedirectFilter loginPageRedirectFilter
+      LoginPageRedirectFilter loginPageRedirectFilter,
+      LogoutWhatsAppHandler logoutWhatsAppHandler
   ) throws Exception {
     httpSecurity.authorizeHttpRequests(auth -> {
       auth.requestMatchers(BusyPalEndpoint.LOGIN, "/error", "/css/**", "/img/**", "/js/**",
@@ -28,6 +32,10 @@ public class SecurityConfiguration {
       auth.anyRequest().authenticated();
     }).sessionManagement(session -> {
       session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+    }).logout(logoutConfigurer -> {
+      logoutConfigurer.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults()
+              .matcher(HttpMethod.GET, BusyPalEndpoint.LOGOUT))
+          .addLogoutHandler(logoutWhatsAppHandler);
     }).with(new WhatsAppAuthenticationConfigurer<>(), waConfigurer -> {
       waConfigurer
           .loginPage(BusyPalEndpoint.LOGIN)
