@@ -36,6 +36,8 @@ function handleMessage(message) {
       colorLight: `#fff`,
       correctLevel: QRCode.CorrectLevel.L
     });
+    let loginButton = document.getElementById('loginBtn');
+    loginButton.disabled=false;
   }
 }
 
