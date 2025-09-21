@@ -7,4 +7,6 @@ public interface EventPublisher {
   void publishEvent(String session, String destination, BaseWsEvent event);
 
   void publishQrCodeEvent(String session, String qrData);
+
+  void publishQrCodeExpiredEvent(String session);
 }

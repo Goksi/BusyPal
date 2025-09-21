@@ -39,6 +39,9 @@ function handleMessage(message) {
     let loginButton = document.getElementById('loginBtn');
     loginButton.disabled=false;
   }
+  if (parsedMsg.event_type === 'wa_qr_expired') {
+    window.location.reload();
+  }
 }
 
 // I HATE JS

@@ -59,7 +59,7 @@ public class WhatsAppSessionOrchestrator {
     }
     LOGGER.debug("Creating new whatsapp session for busypal session id {}", sessionId);
     Whatsapp.webBuilder()
-        .newConnection(sessionId)
+        .newConnection()
         .historySetting(WebHistorySetting.discard(false))
         .name(properties.getDevice().getName())
         .unregistered(qr -> webSocketQrCodeHandler.handle(sessionId, qr))
@@ -69,6 +69,7 @@ public class WhatsAppSessionOrchestrator {
         .whenComplete((whatsapp, throwable) -> {
           if (throwable != null) {
             LOGGER.debug("User with id {} login timeout !", sessionId);
+            webSocketQrCodeHandler.handleExpired(sessionId);
           } else {
             sessions.put(sessionId, whatsapp);
           }

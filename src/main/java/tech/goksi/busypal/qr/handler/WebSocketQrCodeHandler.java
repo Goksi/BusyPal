@@ -29,6 +29,10 @@ public class WebSocketQrCodeHandler {
     handle(sessionId, qrData);
   }
 
+  public void handleExpired(String sessionId) {
+    publisher.publishQrCodeExpiredEvent(sessionId);
+  }
+
   public void clearCache(String sessionId) {
     qrMapping.remove(sessionId);
   }
