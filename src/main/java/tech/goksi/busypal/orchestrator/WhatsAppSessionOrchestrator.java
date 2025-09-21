@@ -94,19 +94,19 @@ public class WhatsAppSessionOrchestrator {
    * @param sessionId the busypal_session identifier
    */
   public void removeSession(String sessionId) {
-    disconnectSession(sessionId);
+    logoutSession(sessionId);
     sessions.remove(sessionId);
   }
 
   /**
-   * Disconnects the WhatsApp session for the given busypal_session.
+   * Log out the WhatsApp session for the given busypal_session.
    *
    * @param sessionId the busypal_session identifier
    */
-  public void disconnectSession(String sessionId) {
+  public void logoutSession(String sessionId) {
     var session = sessions.get(sessionId);
     if (session != null) {
-      session.disconnect();
+      session.logout();
     }
   }
 
