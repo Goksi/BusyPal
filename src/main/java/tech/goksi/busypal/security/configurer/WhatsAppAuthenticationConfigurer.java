@@ -5,7 +5,7 @@ import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import tech.goksi.busypal.security.WhatsAppAuthenticationFilter;
+import tech.goksi.busypal.security.filter.WhatsAppAuthenticationFilter;
 
 public class WhatsAppAuthenticationConfigurer<H extends HttpSecurityBuilder<H>> extends
     AbstractNonOrderedAuthenticationFilterConfigurer<H, WhatsAppAuthenticationConfigurer<H>, WhatsAppAuthenticationFilter> {

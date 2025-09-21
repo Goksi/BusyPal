@@ -1,4 +1,4 @@
-package tech.goksi.busypal.security;
+package tech.goksi.busypal.security.filter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import tech.goksi.busypal.BusyPalEndpoint;
+import tech.goksi.busypal.security.WhatsAppAuthenticationToken;
 
 public class WhatsAppAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
