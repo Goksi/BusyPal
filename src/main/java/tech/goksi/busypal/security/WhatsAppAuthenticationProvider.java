@@ -10,6 +10,15 @@ import tech.goksi.busypal.BusyPalProperties;
 import tech.goksi.busypal.manager.WhatsAppManager;
 import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
+/**
+ * Authentication provider for WhatsApp-based authentication in Spring Security.
+ * <p>
+ * Validates WhatsApp sessions and principals, ensuring only allowed phone numbers can authenticate.
+ * Integrates with WhatsAppManager and BusyPalProperties for session and configuration management.
+ *
+ * @see org.springframework.security.authentication.AuthenticationProvider
+ * @see tech.goksi.busypal.security.model.WhatsAppPrincipal
+ */
 @Component
 public class WhatsAppAuthenticationProvider implements AuthenticationProvider {
 
