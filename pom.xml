@@ -116,6 +116,11 @@
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <artifactId>awaitility</artifactId>
+      <groupId>org.awaitility</groupId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <description>WhatsApp bot that responds instead of you if you are busy</description>
   <groupId>tech.goksi</groupId>

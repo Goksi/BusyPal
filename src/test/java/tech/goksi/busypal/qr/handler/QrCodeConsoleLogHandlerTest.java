@@ -1,4 +1,4 @@
-package tech.goksi.busypal.utils;
+package tech.goksi.busypal.qr.handler;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.TestMemoryAppender;
-import tech.goksi.busypal.qr.handler.QrCodeConsoleLogHandler;
 
 class QrCodeConsoleLogHandlerTest {
 

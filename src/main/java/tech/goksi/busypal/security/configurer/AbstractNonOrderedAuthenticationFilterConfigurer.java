@@ -3,7 +3,6 @@ package tech.goksi.busypal.security.configurer;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,6 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -72,21 +70,6 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<
   }
 
 
-  public final T defaultSuccessUrl(String defaultSuccessUrl) {
-    return defaultSuccessUrl(defaultSuccessUrl, false);
-  }
-
-
-  public final T defaultSuccessUrl(String defaultSuccessUrl, boolean alwaysUse) {
-    SavedRequestAwareAuthenticationSuccessHandler handler =
-        new SavedRequestAwareAuthenticationSuccessHandler();
-    handler.setDefaultTargetUrl(defaultSuccessUrl);
-    handler.setAlwaysUseDefaultTargetUrl(alwaysUse);
-    this.defaultSuccessHandler = handler;
-    return successHandler(handler);
-  }
-
-
   public T loginProcessingUrl(String loginProcessingUrl) {
     this.loginProcessingUrl = loginProcessingUrl;
     this.authFilter.setRequiresAuthenticationRequestMatcher(
@@ -94,18 +77,8 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<
     return getSelf();
   }
 
-  public T securityContextRepository(SecurityContextRepository securityContextRepository) {
-    this.authFilter.setSecurityContextRepository(securityContextRepository);
-    return getSelf();
-  }
-
   protected abstract RequestMatcher createLoginProcessingUrlMatcher(String loginProcessingUrl);
 
-  public final T authenticationDetailsSource(
-      AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource) {
-    this.authenticationDetailsSource = authenticationDetailsSource;
-    return getSelf();
-  }
 
   public final T successHandler(AuthenticationSuccessHandler successHandler) {
     this.successHandler = successHandler;
@@ -198,25 +171,9 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<
     return getSelf();
   }
 
-  protected final void setAuthenticationFilter(F authFilter) {
-    this.authFilter = authFilter;
-  }
-
   private void setLoginPage(String loginPage) {
     this.loginPage = loginPage;
     this.authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint(loginPage);
-  }
-
-  protected final AuthenticationEntryPoint getAuthenticationEntryPoint() {
-    return this.authenticationEntryPoint;
-  }
-
-  protected final String getLoginProcessingUrl() {
-    return this.loginProcessingUrl;
-  }
-
-  protected final String getFailureUrl() {
-    return this.failureUrl;
   }
 
   protected final void updateAuthenticationDefaults() {
@@ -228,14 +185,6 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<
     }
     LogoutConfigurer<B> logoutConfigurer = getBuilder().getConfigurer(LogoutConfigurer.class);
     logoutConfigurer.logoutSuccessUrl(this.loginPage + "?logout");
-  }
-
-  private <C> C getBeanOrNull(B http, Class<C> clazz) {
-    ApplicationContext context = http.getSharedObject(ApplicationContext.class);
-    if (context == null) {
-      return null;
-    }
-    return context.getBeanProvider(clazz).getIfUnique();
   }
 
   @SuppressWarnings("unchecked")
