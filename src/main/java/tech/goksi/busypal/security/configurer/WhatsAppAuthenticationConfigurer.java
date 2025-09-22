@@ -8,7 +8,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import tech.goksi.busypal.security.filter.WhatsAppAuthenticationFilter;
 
 public class WhatsAppAuthenticationConfigurer<H extends HttpSecurityBuilder<H>> extends
-    AbstractNonOrderedAuthenticationFilterConfigurer<H, WhatsAppAuthenticationConfigurer<H>, WhatsAppAuthenticationFilter> {
+    AbstractNonOrderedAuthenticationFilterConfigurer<H,
+        WhatsAppAuthenticationConfigurer<H>, WhatsAppAuthenticationFilter> {
 
 
   public WhatsAppAuthenticationConfigurer() {

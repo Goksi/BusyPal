@@ -22,9 +22,9 @@ public class LoginPageRedirectFilter extends GenericFilterBean {
       throws IOException, ServletException {
     HttpServletRequest servletRequest = (HttpServletRequest) request;
     HttpServletResponse servletResponse = (HttpServletResponse) response;
-    if (servletRequest.getRequestURI().equals(BusyPalEndpoint.LOGIN) &&
-        !response.isCommitted() &&
-        isAuthenticated()
+    if (servletRequest.getRequestURI().equals(BusyPalEndpoint.LOGIN)
+        && !response.isCommitted()
+        && isAuthenticated()
 
     ) {
       servletResponse.sendRedirect(BusyPalEndpoint.INDEX);

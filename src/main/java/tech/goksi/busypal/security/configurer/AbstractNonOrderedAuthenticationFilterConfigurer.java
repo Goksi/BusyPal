@@ -33,14 +33,18 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
-public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<B extends HttpSecurityBuilder<B>, T extends AbstractNonOrderedAuthenticationFilterConfigurer<B, T, F>, F extends AbstractAuthenticationProcessingFilter>
-    extends AbstractHttpConfigurer<T, B> {
+public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<
+    B extends HttpSecurityBuilder<B>,
+    T extends AbstractNonOrderedAuthenticationFilterConfigurer<B, T, F>,
+    F extends AbstractAuthenticationProcessingFilter
+    > extends AbstractHttpConfigurer<T, B> {
 
   private F authFilter;
 
   private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource;
 
-  private SavedRequestAwareAuthenticationSuccessHandler defaultSuccessHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+  private SavedRequestAwareAuthenticationSuccessHandler defaultSuccessHandler =
+      new SavedRequestAwareAuthenticationSuccessHandler();
 
   private AuthenticationSuccessHandler successHandler = this.defaultSuccessHandler;
 
@@ -75,7 +79,8 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<B extends
 
 
   public final T defaultSuccessUrl(String defaultSuccessUrl, boolean alwaysUse) {
-    SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
+    SavedRequestAwareAuthenticationSuccessHandler handler =
+        new SavedRequestAwareAuthenticationSuccessHandler();
     handler.setDefaultTargetUrl(defaultSuccessUrl);
     handler.setAlwaysUseDefaultTargetUrl(alwaysUse);
     this.defaultSuccessHandler = handler;
@@ -153,9 +158,9 @@ public abstract class AbstractNonOrderedAuthenticationFilterConfigurer<B extends
         MediaType.APPLICATION_XHTML_XML, new MediaType("image", "*"), MediaType.TEXT_HTML,
         MediaType.TEXT_PLAIN);
     mediaMatcher.setIgnoredMediaTypes(Collections.singleton(MediaType.ALL));
-    RequestMatcher notXRequestedWith = new NegatedRequestMatcher(
+    RequestMatcher notRequestedWith = new NegatedRequestMatcher(
         new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"));
-    return new AndRequestMatcher(Arrays.asList(notXRequestedWith, mediaMatcher));
+    return new AndRequestMatcher(Arrays.asList(notRequestedWith, mediaMatcher));
   }
 
   @Override

@@ -1,6 +1,6 @@
 package tech.goksi.busypal.event;
 
-public class QrCodeWsEvent extends BaseWsEvent{
+public class QrCodeWsEvent extends BaseWsEvent {
 
   private final String qr;
 
