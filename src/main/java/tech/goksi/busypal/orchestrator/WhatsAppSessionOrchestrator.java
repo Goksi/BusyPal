@@ -113,8 +113,8 @@ public class WhatsAppSessionOrchestrator {
 
   /**
    * Migrates a WhatsApp session from an old busypal_session ID to a new one.
-   * <p>
-   * This method can be used as part of session fixation attack protection,
+   *
+   * <p>This method can be used as part of session fixation attack protection,
    * ensuring the session is transferred to a new identifier after authentication.
    *
    * @param oldSessionId the original busypal_session identifier
@@ -131,8 +131,8 @@ public class WhatsAppSessionOrchestrator {
 
   /**
    * Logs out all active WhatsApp sessions managed by this orchestrator.
-   * <p>
-   * Iterates through all sessions, ensuring each is properly disconnected and logged out.
+   *
+   * <p>Iterates through all sessions, ensuring each is properly disconnected and logged out.
    * Useful for application shutdown or cleanup scenarios.
    */
   public void logoutAllSessions() {

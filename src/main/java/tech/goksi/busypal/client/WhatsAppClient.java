@@ -8,8 +8,8 @@ public interface WhatsAppClient {
 
   /**
    * Sends a WhatsApp message using the specified session and recipient JID.
-   * <p>
-   * Optionally quotes a previous message by providing its JID and message ID.
+   *
+   * <p>Optionally quotes a previous message by providing its JID and message ID.
    *
    * @param session the WhatsApp session to use for sending
    * @param jid the recipient's WhatsApp JID
@@ -28,8 +28,8 @@ public interface WhatsAppClient {
 
   /**
    * Sends a WhatsApp message using the specified session and recipient JID.
-   * <p>
-   * This overload does not quote any previous message.
+   *
+   * <p>This overload does not quote any previous message.
    *
    * @param session the WhatsApp session to use for sending
    * @param jid the recipient's WhatsApp JID

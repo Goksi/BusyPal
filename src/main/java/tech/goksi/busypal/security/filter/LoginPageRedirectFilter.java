@@ -16,8 +16,8 @@ import tech.goksi.busypal.BusyPalEndpoint;
 
 /**
  * Servlet filter that redirects authenticated users away from the login page.
- * <p>
- * If an authenticated user accesses the login endpoint, this filter automatically
+ *
+ * <p>If an authenticated user accesses the login endpoint, this filter automatically
  * redirects them to the main index page, preventing unnecessary login attempts.
  * Integrates with Spring Security's authentication context.
  *

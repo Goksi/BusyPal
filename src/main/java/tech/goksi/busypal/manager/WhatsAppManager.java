@@ -40,8 +40,8 @@ public interface WhatsAppManager {
 
   /**
    * Migrates a WhatsApp session from an old session ID to a new one.
-   * <p>
-   * Used for session fixation attack protection by transferring session state.
+   *
+   * <p>Used for session fixation attack protection by transferring session state.
    *
    * @param oldSessionId the original session identifier
    * @param newSessionId the new session identifier

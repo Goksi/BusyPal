@@ -8,8 +8,8 @@ import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
 /**
  * Authentication token implementation for WhatsApp-based authentication in Spring Security.
- * <p>
- * This token stores a BusyPal session ID as credentials and a WhatsAppPrincipal as the
+ *
+ * <p>This token stores a BusyPal session ID as credentials and a WhatsAppPrincipal as the
  * authenticated principal. It supports both authenticated and non-authenticated states.
  *
  * @see org.springframework.security.authentication.AbstractAuthenticationToken
