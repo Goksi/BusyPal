@@ -35,7 +35,6 @@ public class LoginPageRedirectFilter extends GenericFilterBean {
     if (servletRequest.getRequestURI().equals(BusyPalEndpoint.LOGIN)
         && !response.isCommitted()
         && isAuthenticated()
-
     ) {
       servletResponse.sendRedirect(BusyPalEndpoint.INDEX);
     }
