@@ -1,4 +1,4 @@
-package tech.goksi.busypal.event.debug;
+package tech.goksi.busypal.event.listener.debug;
 
 import it.auties.whatsapp.api.Listener;
 import it.auties.whatsapp.api.Whatsapp;

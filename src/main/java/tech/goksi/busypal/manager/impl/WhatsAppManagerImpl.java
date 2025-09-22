@@ -1,6 +1,9 @@
 package tech.goksi.busypal.manager.impl;
 
 import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import tech.goksi.busypal.client.WhatsAppClient;
@@ -8,9 +11,12 @@ import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
 import tech.goksi.busypal.manager.WhatsAppManager;
 import tech.goksi.busypal.model.whatsapp.WhatsAppMessageInfo;
 import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
+import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
 @Service
-public class WhatsAppManagerImpl implements WhatsAppManager {
+public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(WhatsAppManagerImpl.class);
 
   private final WhatsAppSessionOrchestrator sessionOrchestrator;
   private final WhatsAppClient client;
@@ -40,6 +46,44 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
         quoteMessageInfo.id());
   }
 
+  @Override
+  public void createSession(String sessionId) {
+    sessionOrchestrator.createNewSession(sessionId);
+  }
+
+  @Override
+  public void removeSession(String sessionId) {
+    sessionOrchestrator.removeSession(sessionId);
+  }
+
+  @Override
+  public void migrateSession(String oldSessionId, String newSessionId) {
+    sessionOrchestrator.migrateSession(oldSessionId, newSessionId);
+  }
+
+  @Override
+  public boolean isConnected(String sessionId) {
+    var session = sessionOrchestrator.getSession(sessionId);
+    if (session == null) {
+      return false;
+    }
+    return session.isConnected();
+  }
+
+  @Override
+  public WhatsAppPrincipal getDetails(String sessionId) {
+    var session = sessionOrchestrator.getSession(sessionId);
+    if (session == null) {
+      return null;
+    }
+    var phoneNumber = session.store().phoneNumber().orElse(null);
+    if (phoneNumber == null) {
+      return null;
+    }
+    return new WhatsAppPrincipal(phoneNumber.toString());
+  }
+
+  /*TODO: might be problematic, check*/
   private String getCurrentSessionId() {
     var attributes = RequestContextHolder.getRequestAttributes();
     if (attributes == null) {
@@ -48,4 +92,9 @@ public class WhatsAppManagerImpl implements WhatsAppManager {
     return attributes.getSessionId();
   }
 
+  @Override
+  public void destroy() {
+    LOGGER.info("Running WhatsApp sessions cleanup... Logging out of every session");
+    sessionOrchestrator.logoutAllSessions();
+  }
 }

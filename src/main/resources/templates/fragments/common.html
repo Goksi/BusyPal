@@ -10,7 +10,7 @@
     />
     <script th:if="${@environment.matchesProfiles('dev')}"
             th:src="'http://localhost:' + ${@liveReloadServer.getPort()} + '/livereload.js'"></script>
-    <link rel="icon" th:href="@{favicon-32x32.png}" type="image/png">
+    <link rel="icon" th:href="@{img/favicon-32x32.png}" type="image/png">
 </head>
 <body>
 <ul>
@@ -42,9 +42,15 @@
             <i onclick="window.location.href = this.getAttribute('location-url')" style="color: #FFD43B;" th:class="${rightButtonClass}" th:location-url="${rightButtonLocation}"
                th:title="${rightButtonTitle}"></i>
         </div>
-        <form th:action="@{/create-session}" th:method="POST">
-            <button class="logout-btn" type="submit">Get session</button>
-        </form>
+
+      <div class="user-info">
+        <!--/*@thymesVar id="currentPhone" type="java.lang.String"*/-->
+        <span class="user-value" th:text="${currentPhone}">UNKNOWN</span>
+      </div>
+
+      <a href="/logout">
+        <button class="logout-btn">Logout</button>
+      </a>
     </div>
 </header>
 </body>

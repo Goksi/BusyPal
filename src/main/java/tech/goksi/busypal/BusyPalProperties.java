@@ -1,10 +1,12 @@
 package tech.goksi.busypal;
 
+import java.util.Set;
+
 public class BusyPalProperties {
 
   private Device device;
   private long loginTimeout;
-  private String[] allowedPhoneNumbers;
+  private Set<String> allowedPhoneNumbers;
 
   public Device getDevice() {
     return device;
@@ -22,11 +24,11 @@ public class BusyPalProperties {
     this.loginTimeout = loginTimeout;
   }
 
-  public String[] getAllowedPhoneNumbers() {
+  public Set<String> getAllowedPhoneNumbers() {
     return allowedPhoneNumbers;
   }
 
-  public void setAllowedPhoneNumbers(String[] allowedPhoneNumbers) {
+  public void setAllowedPhoneNumbers(Set<String> allowedPhoneNumbers) {
     this.allowedPhoneNumbers = allowedPhoneNumbers;
   }
 

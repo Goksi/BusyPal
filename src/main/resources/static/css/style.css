@@ -95,19 +95,17 @@ input:checked + .slider:before {
 }
 
 .logout-btn {
-  /*background-color: #d9534f;*/
+  background-color: #d9534f;
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-    background-color: green;
 }
 
 .logout-btn:hover {
-  /*background-color: #c9302c;*/
-    background-color: darkgreen;
+  background-color: #c9302c;
 }
 
 .logout-btn:focus {
@@ -187,4 +185,22 @@ input:checked + .slider:before {
 
 .acknowledged:hover {
   background-color: #5a6268;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+.user-value {
+  color: #FFD43B;
+  font-weight: 600;
+  background: #444;
+  border: 1px solid #555;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
 }
