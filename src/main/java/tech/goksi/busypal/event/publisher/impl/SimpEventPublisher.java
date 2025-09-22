@@ -8,7 +8,7 @@ import tech.goksi.busypal.event.QrCodeWsEvent;
 @Component
 public class SimpEventPublisher extends AbstractSimpEventPublisher {
 
-  protected SimpEventPublisher(SimpMessagingTemplate template) {
+  public SimpEventPublisher(SimpMessagingTemplate template) {
     super(template);
   }
 
