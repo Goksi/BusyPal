@@ -2,6 +2,7 @@ package tech.goksi.busypal.security;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Objects;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 
@@ -32,5 +33,23 @@ public class WhatsAppAuthenticationToken extends AbstractAuthenticationToken
   @Override
   public WhatsAppPrincipal getPrincipal() {
     return principal;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    WhatsAppAuthenticationToken that = (WhatsAppAuthenticationToken) o;
+    return Objects.equals(sessionId, that.sessionId) && Objects.equals(principal,
+        that.principal);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), sessionId, principal);
   }
 }
