@@ -2,7 +2,7 @@ name: BusyPal Release
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+.*"
+      - "v*"
 jobs:
   release:
     name: Release
