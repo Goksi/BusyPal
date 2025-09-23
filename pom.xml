@@ -143,6 +143,6 @@
     <resilience4j-spring-boot3.version>2.3.0</resilience4j-spring-boot3.version>
   </properties>
 
-  <version>dev</version>
+  <version>1.0.0-beta.1</version>
 
 </project>
