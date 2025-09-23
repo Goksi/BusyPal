@@ -1,0 +1,62 @@
+name: BusyPal Release
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+.*"
+jobs:
+  release:
+    if: github.event.base_ref == '/refs/heads/main'
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v5
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Create release branch and bump version
+        id: version
+        env:
+          REF: ${{ github.ref }}
+        run: |
+          BRANCH=release/"${REF:10}"
+          git config --local user.email 'ci@goksi.tech'
+          git config --local user.name 'BusyPal CI'
+          git checkout -b "$BRANCH"
+          git push -u origin "$BRANCH"
+          sed -i 's|<version>dev</version>|<version>${REF:11}</version>|' pom.xml
+          echo "artifact_name=busypal-${REF:11}.jar" >> $GITHUB_OUTPUT
+          git add pom.xml
+          git commit -m 'BusyPal CI: bump version for the release'
+          git push
+
+      - name: Package artifact
+        run: mvn -B package --file pom.xml
+
+      - name: Generate checksum
+        run: |
+          cd target/
+          CHECKSUM=`sha256sum ${{ steps.version.outputs.artifact_name }}`
+          cd ..
+          echo $CHECKSUM > checksum.txt
+          echo -e "### SHA256 Checksum\n\`\`\`\n$CHECKSUM\n\`\`\`" > checksum_md.txt
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2.3.3
+        with:
+          files: |
+            target/${{ steps.version.outputs.artifact_name }}
+            checksum.txt
+          draft: true
+          generate_release_notes: true
+          append_body: true
+          body_path: checksum_md.txt
+          prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
