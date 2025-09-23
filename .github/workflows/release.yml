@@ -32,7 +32,7 @@ jobs:
           git config --local user.name 'BusyPal CI'
           git checkout -b "$BRANCH"
           git push -u origin "$BRANCH"
-          sed -i 's|<version>dev</version>|<version>${REF:11}</version>|' pom.xml
+          sed -i "s|<version>dev</version>|<version>${REF:11}</version>|" pom.xml
           echo "artifact_name=busypal-${REF:11}.jar" >> $GITHUB_OUTPUT
           git add pom.xml
           git commit -m 'BusyPal CI: bump version for the release'
@@ -44,7 +44,7 @@ jobs:
       - name: Generate checksum
         run: |
           cd target/
-          CHECKSUM=`sha256sum ${{ steps.version.outputs.artifact_name }}`
+          CHECKSUM=$(sha256sum ${{ steps.version.outputs.artifact_name }})
           cd ..
           echo $CHECKSUM > checksum.txt
           echo -e "### SHA256 Checksum\n\`\`\`\n$CHECKSUM\n\`\`\`" > checksum_md.txt
