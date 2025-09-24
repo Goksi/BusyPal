@@ -1,4 +1,4 @@
-package tech.goksi.busypal.event.listener.debug;
+package tech.goksi.busypal.event.listener;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -15,17 +15,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.TestMemoryAppender;
+import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
-class DebugEventListenerTest {
+class WhatsAppListenerTest {
 
-  private DebugEventListener listener;
+  private WhatsAppListener listener;
   private TestMemoryAppender appender;
 
   @BeforeEach
   void setup() {
-    listener = new DebugEventListener();
+    listener = new WhatsAppListener("testSession", mock(WhatsAppSessionMessagingHandler.class));
     appender = new TestMemoryAppender();
-    Logger logger = (Logger) LoggerFactory.getLogger(DebugEventListener.class);
+    Logger logger = (Logger) LoggerFactory.getLogger(WhatsAppListener.class);
     logger.setLevel(Level.DEBUG);
     logger.addAppender(appender);
     appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());

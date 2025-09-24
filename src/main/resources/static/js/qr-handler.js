@@ -2,13 +2,14 @@ function connect() {
   let stompClient = StompJs.Stomp.over(function () {
     return new WebSocket("/ws/websocket");
   });
-  stompClient.connect({}, function (frame) {
+  stompClient.connect({}, function () {
     let session = getCookie('busypal_session')
     stompClient.subscribe('/topic/qr-user' + session, handleMessage);
     stompClient.publish({
       destination: '/busypal/ready',
       body: JSON.stringify({event_type: "client_ready", cookie: session})
     })
+    stompClient.subscribe('/topic/wa-user' + session, handleMessage)
   });
 }
 
@@ -36,11 +37,12 @@ function handleMessage(message) {
       colorLight: `#fff`,
       correctLevel: QRCode.CorrectLevel.L
     });
-    let loginButton = document.getElementById('loginBtn');
-    loginButton.disabled=false;
   }
   if (parsedMsg.event_type === 'wa_qr_expired') {
     window.location.reload();
+  }
+  if (parsedMsg.event_type === 'wa_logged_in') {
+    document.getElementById('login').submit();
   }
 }
 
