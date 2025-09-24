@@ -44,6 +44,13 @@
   <form id="login" name="login" th:action="@{/login}" th:method="POST">
 
   </form>
+  <footer class="footer">
+    <p>
+      BusyPal @
+      <a href="https://github.com/Goksi/BusyPal" target="_blank">Github</a>
+      • <span th:text="'v' + ${@busyPalProperties.getVersion()}">vdev</span>
+    </p>
+  </footer>
 </div>
 
 </body>
