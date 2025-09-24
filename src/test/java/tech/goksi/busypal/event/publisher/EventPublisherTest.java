@@ -13,6 +13,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import tech.goksi.busypal.event.QrCodeExpiredWsEvent;
 import tech.goksi.busypal.event.QrCodeWsEvent;
+import tech.goksi.busypal.event.WhatsAppLoggedInWsEvent;
 import tech.goksi.busypal.event.publisher.impl.SimpEventPublisher;
 
 class EventPublisherTest {
@@ -65,6 +66,27 @@ class EventPublisherTest {
     assertAll(
         () -> assertEquals("wa_qr_expired", eventSent.getEventType()),
         () -> assertEquals("session", headers.get("simpSessionId"))
+    );
+  }
+
+  @Test
+  void publishWhatsAppLoggedInEvent_shouldCorrectlyPublishEvent() {
+    publisher.publishWhatsAppLoggedInEvent("someSession");
+    ArgumentCaptor<WhatsAppLoggedInWsEvent> eventCaptor = ArgumentCaptor.forClass(
+        WhatsAppLoggedInWsEvent.class);
+    ArgumentCaptor<MessageHeaders> headersCaptor = ArgumentCaptor.forClass(MessageHeaders.class);
+    verify(template).convertAndSendToUser(
+        eq("someSession"),
+        eq("/topic/wa"),
+        eventCaptor.capture(),
+        headersCaptor.capture()
+    );
+
+    var eventSent = eventCaptor.getValue();
+    var headers = headersCaptor.getValue();
+    assertAll(
+        () -> assertEquals("wa_logged_in", eventSent.getEventType()),
+        () -> assertEquals("someSession", headers.get("simpSessionId"))
     );
   }
 }
