@@ -5,7 +5,7 @@
   <link rel="stylesheet" th:href="@{css/style-login.css}">
   <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.2.0/bundles/stomp.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
-  <script th:src="@{js/qr-handler.js}"></script>
+  <script th:src="@{js/login.js}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       connect();
@@ -44,7 +44,15 @@
   <form id="login" name="login" th:action="@{/login}" th:method="POST">
 
   </form>
+  <footer class="footer">
+    <p>
+      BusyPal @
+      <a aria-label="Github (opens in a new window)" href="https://github.com/Goksi/BusyPal"
+         rel="noopener noreferrer"
+         target="_blank">GitHub</a>
+      • <span th:text="'v' + ${@busyPalProperties.getVersion()}">vdev</span>
+    </p>
+  </footer>
 </div>
-
 </body>
 </html>
