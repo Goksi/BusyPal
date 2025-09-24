@@ -24,7 +24,7 @@ public class SimpEventPublisher extends AbstractSimpEventPublisher {
   }
 
   @Override
-  public void publishWhatsAppLoggedIn(String session) {
+  public void publishWhatsAppLoggedInEvent(String session) {
     publishEvent(session, "/topic/wa", new WhatsAppLoggedInWsEvent());
   }
 }

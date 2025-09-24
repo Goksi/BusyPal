@@ -10,5 +10,5 @@ public interface EventPublisher {
 
   void publishQrCodeExpiredEvent(String session);
 
-  void publishWhatsAppLoggedIn(String session);
+  void publishWhatsAppLoggedInEvent(String session);
 }

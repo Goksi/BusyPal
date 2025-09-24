@@ -13,6 +13,6 @@ public class WhatsAppSessionMessagingHandler {
   }
 
   public void handleAutomaticLogin(String sessionId) {
-    publisher.publishWhatsAppLoggedIn(sessionId);
+    publisher.publishWhatsAppLoggedInEvent(sessionId);
   }
 }
