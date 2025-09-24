@@ -37,14 +37,13 @@
     <p class="qr-instructions">Open WhatsApp on your phone and scan this QR code to authenticate
       your login session.</p>
     <div class="error-box" th:if="${param.error}">
-      You haven't scanned code with WhatsApp or your number is not listed as allowed number
+      Error occurred. Your phone number might not be on list of allowed numbers.
     </div>
   </div>
 
-  <form th:action="@{/login}" th:method="POST">
-    <button class="login-btn" disabled id="loginBtn" type="submit">Login</button>
-  </form>
+  <form id="login" name="login" th:action="@{/login}" th:method="POST">
 
+  </form>
 </div>
 
 </body>

@@ -12,8 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tech.goksi.busypal.BusyPalProperties;
-import tech.goksi.busypal.event.listener.debug.DebugEventListener;
+import tech.goksi.busypal.event.listener.WhatsAppListener;
 import tech.goksi.busypal.qr.handler.WebSocketQrCodeHandler;
+import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
 /**
  * Service for orchestrating WhatsApp sessions. Manages creation, retrieval, and removal of WhatsApp
@@ -28,6 +29,7 @@ public class WhatsAppSessionOrchestrator {
   private final Set<String> queuedSessions;
   private final BusyPalProperties properties;
   private final WebSocketQrCodeHandler webSocketQrCodeHandler;
+  private final WhatsAppSessionMessagingHandler messagingHandler;
 
   /**
    * Constructs a new WhatsAppSessionOrchestrator.
@@ -35,11 +37,13 @@ public class WhatsAppSessionOrchestrator {
    * @param properties application properties
    */
   public WhatsAppSessionOrchestrator(BusyPalProperties properties,
-      WebSocketQrCodeHandler webSocketQrCodeHandler) {
+      WebSocketQrCodeHandler webSocketQrCodeHandler,
+      WhatsAppSessionMessagingHandler messagingHandler) {
     this.sessions = new HashMap<>();
     this.queuedSessions = new HashSet<>();
     this.properties = properties;
     this.webSocketQrCodeHandler = webSocketQrCodeHandler;
+    this.messagingHandler = messagingHandler;
   }
 
   /**
@@ -63,7 +67,7 @@ public class WhatsAppSessionOrchestrator {
         .historySetting(WebHistorySetting.discard(false))
         .name(properties.getDevice().getName())
         .unregistered(qr -> webSocketQrCodeHandler.handle(sessionId, qr))
-        .addListener(new DebugEventListener())
+        .addListener(new WhatsAppListener(sessionId, messagingHandler))
         .connect()
         .orTimeout(properties.getLoginTimeout(), TimeUnit.SECONDS)
         .whenComplete((whatsapp, throwable) -> {

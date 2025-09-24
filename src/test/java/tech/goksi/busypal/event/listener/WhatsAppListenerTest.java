@@ -1,7 +1,9 @@
-package tech.goksi.busypal.event.listener.debug;
+package tech.goksi.busypal.event.listener;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ch.qos.logback.classic.Level;
@@ -15,17 +17,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.TestMemoryAppender;
+import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
-class DebugEventListenerTest {
+class WhatsAppListenerTest {
 
-  private DebugEventListener listener;
+  private WhatsAppListener listener;
+  private WhatsAppSessionMessagingHandler handler;
   private TestMemoryAppender appender;
 
   @BeforeEach
   void setup() {
-    listener = new DebugEventListener();
+    handler = mock(WhatsAppSessionMessagingHandler.class);
+    listener = new WhatsAppListener("testSession", handler);
     appender = new TestMemoryAppender();
-    Logger logger = (Logger) LoggerFactory.getLogger(DebugEventListener.class);
+    Logger logger = (Logger) LoggerFactory.getLogger(WhatsAppListener.class);
     logger.setLevel(Level.DEBUG);
     logger.addAppender(appender);
     appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
@@ -64,5 +69,14 @@ class DebugEventListenerTest {
     when(api.store()).thenReturn(store);
     listener.onLoggedIn(api);
     assertTrue(appender.contains("Phone number 4321 successfully logged into BusyPal"));
+  }
+
+  @Test
+  void onLoggedIn_shouldSendAutomaticLoginEvent() {
+    var api = mock(Whatsapp.class);
+    var store = mock(Store.class);
+    when(api.store()).thenReturn(store);
+    listener.onLoggedIn(api);
+    verify(handler).handleAutomaticLogin(eq("testSession"));
   }
 }
