@@ -34,10 +34,16 @@ jobs:
           java-version: 21
           cache: maven
 
+      - name: Format image name
+        id: image
+        run: |
+          TAG=${{ inputs.version }}
+          echo "image_name=${{ vars.IMAGE_NAME }}:${TAG#v}" >> $GITHUB_OUTPUT
+
       - name: Build image
         run: |
           mvn spring-boot:build-image \
-          -Dspring-boot.build-image.imageName=${{ vars.IMAGE_NAME }}:${project.version}
+          -Dspring-boot.build-image.imageName=${{ steps.image.outputs.image_name }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -45,11 +51,6 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Format image name
-        id: image
-        run: |
-          TAG=${{ inputs.version }}
-          echo "image_name=${{ vars.IMAGE_NAME }}:${TAG#v}" >> $GITHUB_OUTPUT
 
       - name: Push image
         run: docker push ${{ steps.image.outputs.image_name }}
@@ -63,8 +64,8 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             docker pull ${{ steps.image.outputs.image_name }}
-            docker container stop busypal
-            docker container rm busypal
+            docker container stop busypal || true
+            docker container rm busypal || true
             docker container run -d --name busypal \
             -e BUSYPAL_ALLOWED-PHONE-NUMBERS=${{ inputs.allowed_phone_numbers }} \
             ${{ steps.image.outputs.image_name }}
