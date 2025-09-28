@@ -1,0 +1,70 @@
+name: Deploy BusyPal
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to deploy, must be released first"
+        required: true
+        type: string
+      allowed_phone_numbers:
+        description: "CSV list of phone numbers that are allowed to login on BusyPal"
+        required: true
+        type: string
+      environment:
+        description: "Environment to run deployment on"
+        type: environment
+        required: true
+jobs:
+  deploy:
+    name: Run deployment
+    runs-on: ubuntu-24.04-arm
+    environment:
+      name: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v5
+        with:
+          ref: release/${{ inputs.version }}
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build image
+        run: |
+          mvn spring-boot:build-image \
+          -Dspring-boot.build-image.imageName=${{ vars.IMAGE_NAME }}:${project.version}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Format image name
+        id: image
+        run: |
+          TAG=${{ inputs.version }}
+          echo "image_name=${{ vars.IMAGE_NAME }}:${TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Push image
+        run: docker push ${{ steps.image.outputs.image_name }}
+
+      - name: Deploy container
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            docker pull ${{ steps.image.outputs.image_name }}
+            docker container stop busypal
+            docker container rm busypal
+            docker container run -d --name busypal \
+            -e BUSYPAL_ALLOWED-PHONE-NUMBERS=${{ inputs.allowed_phone_numbers }} \
+            ${{ steps.image.outputs.image_name }}
