@@ -2,10 +2,6 @@ name: Deploy BusyPal
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version to deploy, must be released first"
-        required: true
-        type: string
       allowed_phone_numbers:
         description: "CSV list of phone numbers that are allowed to login on BusyPal"
         required: true
@@ -24,8 +20,6 @@ jobs:
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v5
-        with:
-          ref: release/${{ inputs.version }}
 
       - name: Setup JDK
         uses: actions/setup-java@v5
@@ -37,7 +31,9 @@ jobs:
       - name: Format image name
         id: image
         run: |
-          TAG=${{ inputs.version }}
+          BRANCH_NAME=${{ github.ref_name }}
+          TAG=${BRANCH_NAME#release/}
+          echo "Using tag ${TAG} for image version"
           echo "image_name=${{ vars.IMAGE_NAME }}:${TAG#v}" >> $GITHUB_OUTPUT
 
       - name: Build image
