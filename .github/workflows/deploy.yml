@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     environment:
       name: ${{ inputs.environment }}
+      url: ${{ vars.DEPLOY_URL }}
 
     steps:
       - name: Checkout release branch
@@ -64,5 +65,14 @@ jobs:
             docker container stop busypal || true
             docker container rm busypal || true
             docker container run -d --name busypal \
+            --network nginx_network \
             -e BUSYPAL_ALLOWED-PHONE-NUMBERS=${{ inputs.allowed_phone_numbers }} \
+            -e BUSYPAL_ALLOWED-WS-ORIGINS=${{ vars.DEPLOY_URL }} \
             ${{ steps.image.outputs.image_name }}
+
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: ${{ vars.DEPLOY_URL }}/actuator/health
+          max-attempts: 5
+          retry-delay: 5s
