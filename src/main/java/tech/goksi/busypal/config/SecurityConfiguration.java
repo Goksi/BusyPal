@@ -27,7 +27,7 @@ public class SecurityConfiguration {
   ) throws Exception {
     httpSecurity.authorizeHttpRequests(auth -> {
       auth.requestMatchers(BusyPalEndpoint.LOGIN, "/error", "/css/**", "/img/**", "/js/**",
-              "/ws/**")
+              "/ws/**", "/actuator/health")
           .permitAll();
       auth.anyRequest().authenticated();
     }).sessionManagement(session -> {
