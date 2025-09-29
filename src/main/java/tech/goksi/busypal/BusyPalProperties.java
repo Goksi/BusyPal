@@ -7,6 +7,7 @@ public class BusyPalProperties {
   private Device device;
   private long loginTimeout;
   private Set<String> allowedPhoneNumbers;
+  private String[] allowedWsOrigins;
   private String version;
 
   public Device getDevice() {
@@ -31,6 +32,14 @@ public class BusyPalProperties {
 
   public void setAllowedPhoneNumbers(Set<String> allowedPhoneNumbers) {
     this.allowedPhoneNumbers = allowedPhoneNumbers;
+  }
+
+  public String[] getAllowedWsOrigins() {
+    return allowedWsOrigins;
+  }
+
+  public void setAllowedWsOrigins(String[] allowedWsOrigins) {
+    this.allowedWsOrigins = allowedWsOrigins;
   }
 
   public String getVersion() {
