@@ -41,12 +41,14 @@ public class WhatsAppAuthenticationProvider implements AuthenticationProvider {
     }
     WhatsAppPrincipal principal = manager.getDetails(sessionId);
     if (principal == null) {
+      manager.removeSession(sessionId);
       throw new InsufficientAuthenticationException(
           "Unable to pull whatsapp principal out of session");
     }
 
     if (!properties.getAllowedPhoneNumbers().contains("*") && !properties.getAllowedPhoneNumbers()
         .contains(principal.phoneNumber())) {
+      manager.removeSession(sessionId);
       throw new InsufficientAuthenticationException(
           "Principals phone number is not listed as allowed");
     }
