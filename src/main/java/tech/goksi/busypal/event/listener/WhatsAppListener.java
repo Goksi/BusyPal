@@ -28,16 +28,17 @@ public class WhatsAppListener implements Listener {
 
   @Override
   public void onLoggedIn(Whatsapp whatsapp) {
-    doDebugLog(whatsapp);
+    doDebugLoginLog(whatsapp);
     messagingHandler.handleAutomaticLogin(sessionId);
   }
 
   @Override
   public void onDisconnected(DisconnectReason reason) {
-    busyManager.setNotBusy(sessionId);
+    busyManager.setBusy(sessionId, false);
+    //TODO invalidate session
   }
 
-  private void doDebugLog(Whatsapp whatsapp) {
+  private void doDebugLoginLog(Whatsapp whatsapp) {
     Jid user = whatsapp.store().jid().orElse(null);
     String number = null;
     if (user != null) {
