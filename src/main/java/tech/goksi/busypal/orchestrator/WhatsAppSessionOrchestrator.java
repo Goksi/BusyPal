@@ -71,7 +71,7 @@ public class WhatsAppSessionOrchestrator {
         .historySetting(WebHistorySetting.discard(false))
         .name(properties.getDevice().getName())
         .unregistered(qr -> webSocketQrCodeHandler.handle(sessionId, qr))
-        .addListener(new WhatsAppListener(sessionId, messagingHandler, busyManager))
+        .addListener(new WhatsAppListener(sessionId, messagingHandler, busyManager, this))
         .connect()
         .orTimeout(properties.getLoginTimeout(), TimeUnit.SECONDS)
         .whenComplete((whatsapp, throwable) -> {

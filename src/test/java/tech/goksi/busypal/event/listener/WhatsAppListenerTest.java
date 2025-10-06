@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.TestMemoryAppender;
 import tech.goksi.busypal.manager.BusyManager;
+import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
 import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
 class WhatsAppListenerTest {
@@ -30,7 +31,8 @@ class WhatsAppListenerTest {
   void setup() {
     handler = mock(WhatsAppSessionMessagingHandler.class);
     BusyManager manager = mock(BusyManager.class);
-    listener = new WhatsAppListener("testSession", handler, manager);
+    WhatsAppSessionOrchestrator orchestrator = mock(WhatsAppSessionOrchestrator.class);
+    listener = new WhatsAppListener("testSession", handler, manager, orchestrator);
     appender = new TestMemoryAppender();
     Logger logger = (Logger) LoggerFactory.getLogger(WhatsAppListener.class);
     logger.setLevel(Level.DEBUG);

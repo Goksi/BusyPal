@@ -7,6 +7,7 @@ import it.auties.whatsapp.model.jid.Jid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.manager.BusyManager;
+import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
 import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
 /*TODO: build some abstraction around this*/
@@ -17,13 +18,15 @@ public class WhatsAppListener implements Listener {
   private final String sessionId;
   private final WhatsAppSessionMessagingHandler messagingHandler;
   private final BusyManager busyManager;
+  private final WhatsAppSessionOrchestrator orchestrator;
 
   public WhatsAppListener(String sessionId,
       WhatsAppSessionMessagingHandler messagingHandler,
-      BusyManager busyManager) {
+      BusyManager busyManager, WhatsAppSessionOrchestrator orchestrator) {
     this.sessionId = sessionId;
     this.messagingHandler = messagingHandler;
     this.busyManager = busyManager;
+    this.orchestrator = orchestrator;
   }
 
   @Override
@@ -35,6 +38,7 @@ public class WhatsAppListener implements Listener {
   @Override
   public void onDisconnected(DisconnectReason reason) {
     busyManager.setBusy(sessionId, false);
+    orchestrator.removeSession(sessionId);
     //TODO invalidate session
   }
 
