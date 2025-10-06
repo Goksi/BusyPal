@@ -21,7 +21,7 @@ public class BusyController {
     this.busyManager = busyManager;
   }
 
-  @PostMapping(value = "/api/busy", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @PostMapping(value = "/api/busy", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public void setBusy(HttpServletRequest request, @RequestParam("busy") boolean busy) {
     HttpSession session = request.getSession(false);
     String sessionId = session != null ? session.getId() : null;
