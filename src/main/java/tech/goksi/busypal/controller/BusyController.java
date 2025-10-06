@@ -2,6 +2,8 @@ package tech.goksi.busypal.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +12,8 @@ import tech.goksi.busypal.manager.BusyManager;
 
 @RestController
 public class BusyController {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BusyController.class);
 
   private final BusyManager busyManager;
 
@@ -24,7 +28,7 @@ public class BusyController {
     if (sessionId == null) {
       throw new IllegalStateException("Session ID must not be null");
     }
-
+    LOGGER.debug("User with session id {} set their busy status to {}", sessionId, busy);
     busyManager.setBusy(sessionId, busy);
   }
 }
