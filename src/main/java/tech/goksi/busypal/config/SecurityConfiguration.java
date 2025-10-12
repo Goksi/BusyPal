@@ -14,6 +14,7 @@ import tech.goksi.busypal.BusyPalEndpoint;
 import tech.goksi.busypal.security.WhatsAppAuthenticationProvider;
 import tech.goksi.busypal.security.configurer.WhatsAppAuthenticationConfigurer;
 import tech.goksi.busypal.security.filter.LoginPageRedirectFilter;
+import tech.goksi.busypal.security.filter.WhatsAppSessionCheckFilter;
 import tech.goksi.busypal.security.handler.LogoutWhatsAppHandler;
 
 @Configuration
@@ -23,25 +24,27 @@ public class SecurityConfiguration {
   public SecurityFilterChain securityFilterChain(
       HttpSecurity httpSecurity,
       LoginPageRedirectFilter loginPageRedirectFilter,
-      LogoutWhatsAppHandler logoutWhatsAppHandler
+      LogoutWhatsAppHandler logoutWhatsAppHandler,
+      WhatsAppSessionCheckFilter whatsAppSessionCheckFilter
   ) throws Exception {
     httpSecurity.authorizeHttpRequests(auth -> {
-      auth.requestMatchers(BusyPalEndpoint.LOGIN, "/error", "/css/**", "/img/**", "/js/**",
-              "/ws/**", "/actuator/health")
-          .permitAll();
-      auth.anyRequest().authenticated();
-    }).sessionManagement(session -> {
-      session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-    }).logout(logoutConfigurer -> {
-      logoutConfigurer.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults()
-              .matcher(HttpMethod.GET, BusyPalEndpoint.LOGOUT))
-          .addLogoutHandler(logoutWhatsAppHandler);
-    }).with(new WhatsAppAuthenticationConfigurer<>(), waConfigurer -> {
-      waConfigurer
-          .loginPage(BusyPalEndpoint.LOGIN)
-          .successForwardUrl(BusyPalEndpoint.INDEX)
-          .loginProcessingUrl(BusyPalEndpoint.LOGIN);
-    }).addFilterAfter(loginPageRedirectFilter, UsernamePasswordAuthenticationFilter.class);
+          auth.requestMatchers(BusyPalEndpoint.LOGIN, "/error", "/css/**", "/img/**", "/js/**",
+                  "/ws/**", "/actuator/health")
+              .permitAll();
+          auth.anyRequest().authenticated();
+        }).sessionManagement(session -> {
+          session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+        }).logout(logoutConfigurer -> {
+          logoutConfigurer.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults()
+                  .matcher(HttpMethod.GET, BusyPalEndpoint.LOGOUT))
+              .addLogoutHandler(logoutWhatsAppHandler);
+        }).with(new WhatsAppAuthenticationConfigurer<>(), waConfigurer -> {
+          waConfigurer
+              .loginPage(BusyPalEndpoint.LOGIN)
+              .successForwardUrl(BusyPalEndpoint.INDEX)
+              .loginProcessingUrl(BusyPalEndpoint.LOGIN);
+        }).addFilterAfter(loginPageRedirectFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(whatsAppSessionCheckFilter, UsernamePasswordAuthenticationFilter.class);
     return httpSecurity.build();
   }
 
