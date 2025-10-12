@@ -57,6 +57,14 @@ public interface WhatsAppManager {
   boolean isConnected(String sessionId);
 
   /**
+   * Checks if a WhatsApp session with the specified ID is currently being managed.
+   *
+   * @param sessionId the session identifier to check
+   * @return true if a session with the given ID exists and is being managed, false otherwise
+   */
+  boolean isManagingSession(String sessionId);
+
+  /**
    * Retrieves WhatsApp principal details for the given session ID.
    *
    * @param sessionId the session identifier

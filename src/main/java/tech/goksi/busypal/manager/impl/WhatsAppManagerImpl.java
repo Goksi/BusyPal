@@ -71,6 +71,11 @@ public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
   }
 
   @Override
+  public boolean isManagingSession(String sessionId) {
+    return sessionOrchestrator.getSession(sessionId) != null;
+  }
+
+  @Override
   public WhatsAppPrincipal getDetails(String sessionId) {
     var session = sessionOrchestrator.getSession(sessionId);
     if (session == null) {
