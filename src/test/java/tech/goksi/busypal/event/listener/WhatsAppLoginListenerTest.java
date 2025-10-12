@@ -17,24 +17,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import tech.goksi.busypal.TestMemoryAppender;
-import tech.goksi.busypal.manager.BusyManager;
-import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
 import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
-class WhatsAppListenerTest {
+class WhatsAppLoginListenerTest {
 
-  private WhatsAppListener listener;
+  private WhatsAppLoginListener listener;
   private WhatsAppSessionMessagingHandler handler;
   private TestMemoryAppender appender;
 
   @BeforeEach
   void setup() {
     handler = mock(WhatsAppSessionMessagingHandler.class);
-    BusyManager manager = mock(BusyManager.class);
-    WhatsAppSessionOrchestrator orchestrator = mock(WhatsAppSessionOrchestrator.class);
-    listener = new WhatsAppListener("testSession", handler, manager, orchestrator);
+    listener = new WhatsAppLoginListener("testSession", handler);
     appender = new TestMemoryAppender();
-    Logger logger = (Logger) LoggerFactory.getLogger(WhatsAppListener.class);
+    Logger logger = (Logger) LoggerFactory.getLogger(WhatsAppLoginListener.class);
     logger.setLevel(Level.DEBUG);
     logger.addAppender(appender);
     appender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());

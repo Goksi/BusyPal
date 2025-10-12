@@ -1,45 +1,30 @@
 package tech.goksi.busypal.event.listener;
 
-import it.auties.whatsapp.api.DisconnectReason;
 import it.auties.whatsapp.api.Listener;
 import it.auties.whatsapp.api.Whatsapp;
 import it.auties.whatsapp.model.jid.Jid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.goksi.busypal.manager.BusyManager;
-import tech.goksi.busypal.orchestrator.WhatsAppSessionOrchestrator;
 import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
 /*TODO: build some abstraction around this*/
-public class WhatsAppListener implements Listener {
+public class WhatsAppLoginListener implements Listener {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(WhatsAppListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WhatsAppLoginListener.class);
 
   private final String sessionId;
   private final WhatsAppSessionMessagingHandler messagingHandler;
-  private final BusyManager busyManager;
-  private final WhatsAppSessionOrchestrator orchestrator;
 
-  public WhatsAppListener(String sessionId,
-      WhatsAppSessionMessagingHandler messagingHandler,
-      BusyManager busyManager, WhatsAppSessionOrchestrator orchestrator) {
+  public WhatsAppLoginListener(String sessionId,
+      WhatsAppSessionMessagingHandler messagingHandler) {
     this.sessionId = sessionId;
     this.messagingHandler = messagingHandler;
-    this.busyManager = busyManager;
-    this.orchestrator = orchestrator;
   }
 
   @Override
   public void onLoggedIn(Whatsapp whatsapp) {
     doDebugLoginLog(whatsapp);
     messagingHandler.handleAutomaticLogin(sessionId);
-  }
-
-  @Override
-  public void onDisconnected(DisconnectReason reason) {
-    busyManager.setBusy(sessionId, false);
-    orchestrator.removeSession(sessionId);
-    //TODO invalidate session
   }
 
   private void doDebugLoginLog(Whatsapp whatsapp) {
