@@ -16,8 +16,6 @@ import it.auties.whatsapp.model.mobile.PhoneNumber;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import tech.goksi.busypal.client.WhatsAppClient;
 import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
 import tech.goksi.busypal.manager.WhatsAppManager;
@@ -37,9 +35,6 @@ class WhatsAppManagerTest {
     client = mock(WhatsAppClient.class);
     orchestrator = mock(WhatsAppSessionOrchestrator.class);
     manager = new WhatsAppManagerImpl(orchestrator, client);
-    var attributes = mock(RequestAttributes.class);
-    when(attributes.getSessionId()).thenReturn("testSession");
-    RequestContextHolder.setRequestAttributes(attributes);
     api = mock(Whatsapp.class);
   }
 
@@ -47,14 +42,14 @@ class WhatsAppManagerTest {
   void sendMessage_shouldThrowIfNoWaSessionAttached() {
     when(orchestrator.getSession(eq("testSession"))).thenReturn(null);
     assertThrows(WhatsAppNotConnectedException.class, () -> {
-      manager.sendMessage(null, null, null);
+      manager.sendMessage("testSession", null, null, null);
     });
   }
 
   @Test
   void sendMessage_shouldSendUnQuotedMessageIfNull() {
     when(orchestrator.getSession(eq("testSession"))).thenReturn(api);
-    manager.sendMessage("testJid", "testMsg", null);
+    manager.sendMessage("testSession", "testJid", "testMsg", null);
     verify(client).sendMessage(eq(api), eq("testJid"), eq("testMsg"));
   }
 
@@ -62,6 +57,7 @@ class WhatsAppManagerTest {
   void sendMessage_shouldSendQuotedMessage() {
     when(orchestrator.getSession(eq("testSession"))).thenReturn(api);
     manager.sendMessage(
+        "testSession",
         "testJid",
         "testMsg",
         new WhatsAppMessageInfo("quotedJid", "quotedId")

@@ -14,15 +14,20 @@ import tech.goksi.busypal.security.model.WhatsAppPrincipal;
 public interface WhatsAppManager {
 
   /**
-   * Sends a message to the specified WhatsApp JID.
+   * Sends a message to a specified WhatsApp JID (user or group) within the context of a session.
    *
-   * @param jid              the WhatsApp JID (user or group identifier)
-   * @param message          the message content to send
-   * @param quoteMessageInfo information about the quoted message, if any
-   * @return a CompletableFuture containing the sent MessageInfo
+   * @param sessionId         the unique identifier for the user's busy_session
+   * @param jid               the WhatsApp JID (user or group identifier) to send the message to
+   * @param message           the content of the message to send
+   * @param quoteMessageInfo  information about a message to quote/reply to, or null if not quoting
+   * @return a CompletableFuture containing the sent WhatsAppMessageInfo upon completion
    */
-  CompletableFuture<WhatsAppMessageInfo> sendMessage(String jid, String message,
-      WhatsAppMessageInfo quoteMessageInfo);
+  CompletableFuture<WhatsAppMessageInfo> sendMessage(
+      String sessionId,
+      String jid,
+      String message,
+      WhatsAppMessageInfo quoteMessageInfo
+  );
 
   /**
    * Creates a new WhatsApp session for the specified session ID.

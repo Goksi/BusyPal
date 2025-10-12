@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
 import tech.goksi.busypal.client.WhatsAppClient;
 import tech.goksi.busypal.exceptions.WhatsAppNotConnectedException;
 import tech.goksi.busypal.manager.WhatsAppManager;
@@ -29,11 +28,11 @@ public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
 
   @Override
   public CompletableFuture<WhatsAppMessageInfo> sendMessage(
+      String currentSession,
       String jid,
       String message,
       WhatsAppMessageInfo quoteMessageInfo
   ) {
-    String currentSession = getCurrentSessionId();
     var whatsAppSession = sessionOrchestrator.getSession(currentSession);
     if (whatsAppSession == null) {
       throw new WhatsAppNotConnectedException(
@@ -86,15 +85,6 @@ public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
       return null;
     }
     return new WhatsAppPrincipal(phoneNumber.toString());
-  }
-
-  /*TODO: might be problematic, check*/
-  private String getCurrentSessionId() {
-    var attributes = RequestContextHolder.getRequestAttributes();
-    if (attributes == null) {
-      return null;
-    }
-    return attributes.getSessionId();
   }
 
   @Override
