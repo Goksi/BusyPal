@@ -58,7 +58,7 @@ public class WhatsAppManagerImpl implements WhatsAppManager, DisposableBean {
 
   @Override
   public void migrateSession(String oldSessionId, String newSessionId) {
-    sessionOrchestrator.migrateSession(oldSessionId, newSessionId);
+    sessionOrchestrator.migrateSession(oldSessionId, newSessionId, this);
   }
 
   @Override

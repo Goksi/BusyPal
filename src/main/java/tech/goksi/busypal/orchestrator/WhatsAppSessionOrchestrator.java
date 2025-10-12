@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import tech.goksi.busypal.BusyPalProperties;
 import tech.goksi.busypal.event.listener.WhatsAppLoginListener;
+import tech.goksi.busypal.event.listener.WhatsAppMessageListener;
+import tech.goksi.busypal.manager.BusyManager;
+import tech.goksi.busypal.manager.WhatsAppManager;
 import tech.goksi.busypal.qr.handler.WebSocketQrCodeHandler;
 import tech.goksi.busypal.security.handler.messaging.WhatsAppSessionMessagingHandler;
 
@@ -30,6 +33,7 @@ public class WhatsAppSessionOrchestrator {
   private final BusyPalProperties properties;
   private final WebSocketQrCodeHandler webSocketQrCodeHandler;
   private final WhatsAppSessionMessagingHandler messagingHandler;
+  private final BusyManager busyManager;
 
   /**
    * Constructs a new WhatsAppSessionOrchestrator.
@@ -38,7 +42,8 @@ public class WhatsAppSessionOrchestrator {
    */
   public WhatsAppSessionOrchestrator(BusyPalProperties properties,
       WebSocketQrCodeHandler webSocketQrCodeHandler,
-      WhatsAppSessionMessagingHandler messagingHandler) {
+      WhatsAppSessionMessagingHandler messagingHandler, BusyManager busyManager) {
+    this.busyManager = busyManager;
     this.sessions = new HashMap<>();
     this.queuedSessions = new HashSet<>();
     this.properties = properties;
@@ -120,15 +125,24 @@ public class WhatsAppSessionOrchestrator {
    *
    * <p>This method can be used as part of session fixation attack protection,
    * ensuring the session is transferred to a new identifier after authentication.
+   * The migration process:
+   * <ol>
+   *   <li>Retrieves the existing session using the old ID</li>
+   *   <li>Adds a new WhatsAppMessageListener configured with the new session ID</li>
+   *   <li>Removes the session from the old ID mapping</li>
+   *   <li>Associates the session with the new ID</li>
+   * </ol>
    *
    * @param oldSessionId the original busypal_session identifier
    * @param newSessionId the new busypal_session identifier
+   * @param manager the WhatsApp manager to be used with the new message listener
    */
-  public void migrateSession(String oldSessionId, String newSessionId) {
+  public void migrateSession(String oldSessionId, String newSessionId, WhatsAppManager manager) {
     var session = sessions.get(oldSessionId);
     if (session == null) {
       return;
     }
+    session.addListener(new WhatsAppMessageListener(newSessionId, manager, busyManager));
     sessions.remove(oldSessionId);
     sessions.put(newSessionId, session);
   }

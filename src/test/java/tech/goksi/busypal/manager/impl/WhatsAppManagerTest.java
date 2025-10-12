@@ -86,7 +86,7 @@ class WhatsAppManagerTest {
   @Test
   void migrateSession_shouldCallOrchestrator() {
     manager.migrateSession("test", "test1");
-    verify(orchestrator).migrateSession(eq("test"), eq("test1"));
+    verify(orchestrator).migrateSession(eq("test"), eq("test1"), eq(manager));
   }
 
   @Test
